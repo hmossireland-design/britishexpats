@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRITS ABROAD 2026 – Your Sunshine Relocation Adventure</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+    body {background:#fffbe6;color:#333;line-height:1.6;background:url('https://img.freepik.com/premium-photo/sunny-tropical-beach-with-palm-trees-turquoise-water-island-vacation-summer-day-paradise-island_663265-3994.jpg') center/cover fixed;}
+    .hero {position:relative;height:100vh;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;color:white;text-align:center;display:flex;align-items:center;justify-content:center;}
+    .hero::before {content:'';position:absolute;inset:0;background:rgba(0,0,0,0.4);}
+    .hero-content {position:relative;z-index:1;padding:2rem;max-width:800px;}
+    h1 {font-size:3.5rem;margin-bottom:1rem;text-shadow:2px 2px 4px rgba(0,0,0,0.6);}
+    .hero p {font-size:1.8rem;margin-bottom:2rem;text-shadow:1px 1px 2px black;}
+    button {background:#ff8c00;color:white;padding:1.2rem 2.5rem;border:none;border-radius:50px;font-size:1.4rem;cursor:pointer;transition:0.3s;box-shadow:0 4px 15px rgba(255,140,0,0.4);}
+    button:hover {background:#ff6b00;transform:scale(1.05);}
+    button.startover {position:fixed;bottom:20px;right:20px;background:#d32f2f;z-index:10;}
+    button.buy {background:#ffd700;color:#c8102e;font-size:2.2rem;padding:1.8rem;width:90%;max-width:500px;margin:3rem auto;display:block;box-shadow:0 10px 30px rgba(255,215,0,0.5);}
+    #progress-wrapper {max-width:900px;margin:3rem auto;padding:0 1rem;}
+    #progress-text {font-weight:bold;margin-bottom:0.8rem;text-align:center;font-size:1.4rem;color:#ff8c00;}
+    #progress-bar {height:25px;background:#fff;border-radius:25px;overflow:hidden;box-shadow:inset 0 2px 10px rgba(0,0,0,0.1);}
+    #progress-fill {height:100%;background:linear-gradient(to right, #ff8c00, #ffd700);width:0%;transition:width 0.6s;}
+    #app {max-width:900px;margin:0 auto;padding:1rem;}
+    .phase-card {background:rgba(255,255,255,0.9);padding:3rem;border-radius:30px;box-shadow:0 15px 40px rgba(0,0,0,0.15);margin-bottom:3rem;text-align:center;}
+    .phase-card h2 {font-size:2.4rem;margin-bottom:1.5rem;color:#ff8c00;}
+    .phase-card label {display:block;margin:1.5rem 0 0.8rem;font-weight:bold;font-size:1.2rem;color:#333;}
+    .phase-card select,.phase-card input[type="range"] {width:100%;padding:1rem;border-radius:20px;border:2px solid #ff8c00;font-size:1.2rem;background:white;}
+    .phase-result {background:#fffbe6;padding:1.5rem;border-left:8px solid #ffd700;margin-top:1.5rem;border-radius:20px;display:none;font-size:1.2rem;}
+    .result {font-size:2.8rem;background:linear-gradient(to right, #ff8c00, #ffd700);color:white;padding:2.5rem;border-radius:30px;text-align:center;margin:3rem 0;box-shadow:0 15px 40px rgba(255,140,0,0.4);}
+    .section {background:rgba(232,245,233,0.9);padding:2rem;border-radius:20px;margin:2rem 0;text-align:left;border-left:6px solid #ffd700;}
+    table {width:100%;border-collapse:collapse;margin:1rem 0;}
+    th, td {padding:1rem;text-align:left;border-bottom:1px solid #ddd;}
+    th {background:#ff8c00;color:white;}
+    .checklist li {margin:0.8rem 0;padding-left:2.5rem;position:relative;}
+    .checklist input[type="checkbox"] {position:absolute;left:0;top:0.2rem;}
+    @media (max-width:600px) {h1{font-size:2.8rem;}.hero p{font-size:1.4rem;}}
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="hero-content">
+      <h1>BRITS ABROAD 2026 🌴☀️</h1>
+      <p>For retirees, remote workers, families & everyone – your dream life awaits!</p>
+      <button id="start-btn">Start Your Adventure Now!</button>
+    </div>
+  </div>
+
+  <div id="progress-wrapper">
+    <div id="progress-text">Ready for paradise?</div>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+  </div>
+
+  <div id="app"></div>
+
+  <button class="startover" id="startover-btn">Start Over</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const app = document.getElementById("app");
+    let currentPhase = 0;
+    let userData = {};
+
+    const phases = [
+      {title: "🌍 Dream Destination", id: "destination", type: "select", options: ["Portugal","Spain","Ireland","Australia","Cyprus","Malta","France","UAE","Thailand","Italy","Greece","Canada","New Zealand","Malaysia","Panama","Mexico","Costa Rica","Hungary","Poland","Slovenia","Slovakia","Bulgaria","Indonesia","Colombia","Mauritius","Belize","Ecuador","Uruguay","Chile","Latvia"]},
+      {title: "💼 Your Situation", id: "situation", type: "select", options: ["Retired with pension","Remote/digital nomad","Working abroad","Family move","Just exploring","No income yet","Business/Company Owner/Director","Offshore Company Owner"]},
+      {title: "💰 Monthly Income (£)", id: "income", type: "range", min:0, max:20000, step:500},
+      {title: "👴 Your Age", id: "age", type: "range", min:18, max:85, step:1},
+      {title: "👨‍👩‍👧 Family Joining?", id: "family", type: "select", options: ["No","Spouse only","Spouse + children","Extended family"]},
+      {title: "🏥 Healthcare Needs", id: "health", type: "select", options: ["Good health","Pre-existing conditions","Family coverage needed","Private Insurance Preferred","Public System Only"]},
+      {title: "💼 Work Plans", id: "work", type: "select", options: ["Fully retired","Remote/digital nomad","Local job","No work","Business/Company Owner/Director"]},
+      {title: "📅 Move Timeline", id: "timeline", type: "select", options: ["Within 6 months","6-12 months","1-2 years","Just exploring"]},
+      {title: "🎯 Lifestyle Priorities", id: "priority", type: "select", options: ["Low cost","Warm climate","English-speaking","Tax advantages","Nature","City life","Ease of Doing Business","Low Corruption Index","Working Rights for UK Passport Holders"]},
+      {title: "Final Report & Premium Unlock", type: "final"}
+    ];
+
+    const costData = {
+      "Portugal": {monthly: 1800},
+      "Spain": {monthly: 1900},
+      "Ireland": {monthly: 2800},
+      "Australia": {monthly: 2800},
+      "Cyprus": {monthly: 2000},
+      "Malta": {monthly: 2200},
+      "France": {monthly: 2100},
+      "UAE": {monthly: 2500},
+      "Thailand": {monthly: 1200},
+      "Italy": {monthly: 2000},
+      "Greece": {monthly: 1600},
+      "Canada": {monthly: 2200},
+      "New Zealand": {monthly: 2500},
+      "Malaysia": {monthly: 1000},
+      "Panama": {monthly: 1500},
+      "Mexico": {monthly: 1200},
+      "Costa Rica": {monthly: 1500},
+      "Hungary": {monthly: 1300},
+      "Poland": {monthly: 1400},
+      "Slovenia": {monthly: 1600},
+      "Slovakia": {monthly: 1400},
+      "Bulgaria": {monthly: 1000},
+      "Indonesia": {monthly: 900},
+      "Colombia": {monthly: 900},
+      "Mauritius": {monthly: 1400},
+      "Belize": {monthly: 1500},
+      "Ecuador": {monthly: 1000},
+      "Uruguay": {monthly: 1800},
+      "Chile": {monthly: 1300},
+      "Latvia": {monthly: 1400}
+    };
+
+    const taxData = {
+      "Portugal": "Income Tax: Progressive 14.5-48% (NHR 2.0: flat 20% foreign income). Capital Gains: 28%. Property CGT: 50% inclusion. Annual Property Tax: 0.3-0.8%. Buying: IMT 6-8%. Crypto: 28%. Pensions often favourable.",
+      "UAE": "Income Tax: 0%. Capital Gains: 0%. Property Tax: Low/none. Crypto: 0%. Tax haven.",
+      "Cyprus": "Income Tax: 0-35% (first €19,500 exempt). Non-dom: Exempt dividends/interest. Capital Gains: 20% property only. Crypto: Passive untaxed.",
+      // Add all countries as before
+    };
+
+    function startApp() {
+      currentPhase = 0;
+      userData = {};
+      renderPhase();
+    }
+
+    document.getElementById("start-btn").addEventListener("click", startApp);
+    document.getElementById("startover-btn").addEventListener("click", startApp);
+
+    function renderPhase() {
+      app.innerHTML = "";
+      if (currentPhase >= phases.length - 1) {
+        showFinal();
+        return;
+      }
+      const phase = phases[currentPhase];
+      let html = `<div class="phase-card"><h2>${phase.title}</h2>`;
+      if (phase.type === "select") {
+        html += `<select id="${phase.id}"><option>-- Choose --</option>`;
+        phase.options.forEach(o => html += `<option>${o}</option>`);
+        html += `</select>`;
+      } else if (phase.type === "range") {
+        html += `<label>\( {phase.title}</label><input type="range" min=" \){phase.min}" max="\( {phase.max}" step=" \){phase.step}" value="0" id="\( {phase.id}" oninput="document.getElementById(' \){phase.id}Value').innerText = (phase.id === 'age' ? this.value + ' years' : '£' + this.value.toLocaleString())"><span id="${phase.id}Value">£0</span>`;
+      }
+      html += `<div class="phase-result" id="${phase.id}-result"></div><button onclick="savePhase()">Continue</button></div>`;
+      app.innerHTML = html;
+      updateProgress();
+    }
+
+    function savePhase() {
+      const phase = phases[currentPhase];
+      const input = document.getElementById(phase.id);
+      const val = input.value;
+      if (!val && phase.type !== "range") return alert("Please complete this step");
+      userData[phase.id] = val || "0";
+      const result = document.getElementById(phase.id + "-result");
+      result.innerHTML = `<strong>${val}</strong>`;
+      result.style.display = "block";
+      currentPhase++;
+      renderPhase();
+    }
+
+    function updateProgress() {
+      document.getElementById("progress-text").innerText = `Phase ${currentPhase + 1} of ${phases.length}`;
+      document.getElementById("progress-fill").style.width = ((currentPhase + 1) / phases.length * 100) + "%";
+    }
+
+    function showFinal() {
+      const destination = userData.destination || "Portugal";
+      const monthlyCost = costData[destination]?.monthly || 1800;
+      const ukMonthly = 2500;
+      const monthlySavings = ukMonthly - monthlyCost;
+      const annualSavings = monthlySavings * 12;
+      app.innerHTML = `
+        <div class="phase-card">
+          <h2>🎉 Your 2026 Personalised Relocation Report</h2>
+          <div class="result">Potential annual cost savings: <strong>£${annualSavings.toLocaleString()}</strong> in ${destination}!</div>
+          <div class="section">
+            <h3>Cost of Living Comparison</h3>
+            <p>UK: £${ukMonthly.toLocaleString()} vs \( {destination}: £ \){monthlyCost.toLocaleString()} (save £${monthlySavings.toLocaleString()}/month)</p>
+            <p>See detailed comparison: <a href="https://www.numbeo.com/cost-of-living/compare_countries_result.jsp?country1=United+Kingdom&country2=${encodeURIComponent(destination)}" target="_blank">Numbeo UK vs ${destination}</a></p>
+          </div>
+          <div class="section">
+            <h3>Tax Overview for Expats in ${destination}</h3>
+            <p>${taxData[destination] || "Favourable for expats – check latest."}</p>
+          </div>
+          <div class="section">
+            <h3>Local Laws & Rules</h3>
+            <p>Drink driving limit: 0.05% (most EU). Speed limits: urban 50km/h, motorways 120km/h. Common fines: parking €100+, smoking bans.</p>
+          </div>
+          <div class="section">
+            <h3>Expat Community Hub</h3>
+            <p>Join InterNations, Facebook expat groups, Meetup, Reddit r/IWantOut & r/expats.</p>
+            <button onclick="alert('Finding locals in ${destination}...')">Find Locals</button>
+          </div>
+          <button class="buy">UNLOCK PREMIUM PACK – ONLY £9.97</button>
+        </div>
+      `;
+      confetti({particleCount: 200, spread: 70, origin: { y: 0.6 }});
+    }
+  </script>
+</body>
+</html>
