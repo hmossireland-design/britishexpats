@@ -25,7 +25,7 @@
     .phase-card h2 {font-size:2.4rem;margin-bottom:1.5rem;color:#ff8c00;}
     .phase-card label {display:block;margin:2rem 0 1rem;font-weight:bold;font-size:1.4rem;color:#333;}
     .phase-card select,.phase-card input[type="range"] {width:100%;padding:1rem;border-radius:20px;border:2px solid #ff8c00;font-size:1.2rem;background:white;}
-    .slider-value {font-size:1.8rem;font-weight:bold;color:#ff8c00;margin:1rem 0;}
+    .slider-value {font-size:2rem;font-weight:bold;color:#ff8c00;margin:1.5rem 0;}
     .phase-result {background:#fffbe6;padding:1.5rem;border-left:8px solid #ffd700;margin-top:1.5rem;border-radius:20px;display:none;font-size:1.2rem;}
     .result {font-size:2.8rem;background:linear-gradient(to right, #ff8c00, #ffd700);color:white;padding:2.5rem;border-radius:30px;text-align:center;margin:3rem 0;box-shadow:0 15px 40px rgba(255,140,0,0.4);}
     .section {background:rgba(232,245,233,0.9);padding:2rem;border-radius:20px;margin:2rem 0;text-align:left;border-left:6px solid #ffd700;}
@@ -108,49 +108,6 @@
       "Latvia": {monthly: 1400}
     };
 
-    const taxData = {
-      "Portugal": "Income Tax: Progressive 14.5-48% (NHR 2.0: flat 20% foreign income). Capital Gains: 28%. Property CGT: 50% inclusion. Annual Property Tax: 0.3-0.8%. Buying: IMT 6-8%. Crypto: 28%. Pensions often favourable.",
-      "Spain": "Income Tax: 19-47%. Capital Gains: 19-28%. Property: Added to income. Annual Property Tax: IBI 0.4-1.1%. Buying: Transfer 6-11%. Crypto: 19-28%.",
-      "Ireland": "Income Tax: 20-40%. Capital Gains: 33%. Annual Property Tax: LPT 0.18-0.25%. Buying: Stamp 1-2%. Crypto: CGT.",
-      "Australia": "Income Tax: 0-45%. Capital Gains: 50% discount >1 year. Annual Property Tax: Council rates. Buying: Stamp high. Crypto: CGT.",
-      "Cyprus": "Income Tax: 0-35% (first €19,500 exempt). Non-dom: Exempt dividends/interest. Capital Gains: 20% property only. Annual Property Tax: Low. Buying: Transfer 3-8%. Crypto: Passive untaxed. Excellent for investors/crypto.",
-      "Malta": "Income Tax: 0-35%. Capital Gains: Property 5-12%. Annual Property Tax: None central. Buying: Stamp 5%. Crypto: Long-term untaxed.",
-      "France": "Income Tax: 0-45%. Capital Gains: 30% flat. Annual Property Tax: ~0.5-1%. Buying: Notary 7-8%. Crypto: 30%.",
-      "UAE": "Income Tax: 0%. Capital Gains: 0%. Property Tax: Low/none. Buying: Registration 4%. Crypto: 0%. Tax haven.",
-      "Thailand": "Income Tax: 0-35%. Capital Gains: Often exempt. Annual Property Tax: Low. Crypto: Exempt certain platforms.",
-      "Italy": "Income Tax: 23-43%. Capital Gains: 26%. Annual Property Tax: IMU 0.4-1.1%. Buying: Registration 2-9%. Crypto: 26%. Flat 7% south.",
-      "Greece": "Income Tax: 9-44%. Capital Gains: 15%. Annual Property Tax: ENFIA 0.1-0.5%. Buying: Transfer 3%. Crypto: 15%.",
-      "Canada": "Income Tax: 15-53%. Capital Gains: 50% inclusion. Annual Property Tax: 0.5-1%. Crypto: CGT.",
-      "New Zealand": "Income Tax: 10.5-39%. No general CGT (property bright-line). Crypto: Taxed if trading.",
-      "Malaysia": "Income Tax: 0-30%. Capital Gains: 0% general. Annual Property Tax: Low. Crypto: Casual untaxed.",
-      "Panama": "Territorial tax – foreign income exempt. Local income 0-25%. Capital Gains: 10%.",
-      "Mexico": "Income Tax: 1.92-35%. Capital Gains: Up to 35%. Annual Property Tax: Low.",
-      "Costa Rica": "Territorial – foreign exempt. Local progressive.",
-      "Hungary": "Flat 15% income. Capital Gains: 15%.",
-      "Poland": "12-32% income. Capital Gains: 19%.",
-      "Slovenia": "16-50% income. Capital Gains: Decreasing.",
-      "Slovakia": "19-25% income. Capital Gains: Exempt after time.",
-      "Bulgaria": "Flat 10% income. Capital Gains: 10%.",
-      "Indonesia": "5-35% income. Capital Gains: Varies.",
-      "Colombia": "Progressive income. Capital Gains: 10-15%.",
-      "Mauritius": "15% income. No general CGT.",
-      "Belize": "Territorial – foreign exempt.",
-      "Ecuador": "Progressive income. Capital Gains: Varies.",
-      "Uruguay": "0-36% income. Foreign low.",
-      "Chile": "Progressive income. Capital Gains: Varies.",
-      "Latvia": "20-31% income. Capital Gains: 20-25.5%."
-    };
-
-    const lawsData = {
-      "Portugal": "Drink driving: 0.05%. Speed limits: urban 50km/h, motorways 120km/h. Fines: parking €60-300, smoking bans in public.",
-      "Spain": "Drink driving: 0.05%. Speed limits: urban 30-50km/h, motorways 120km/h. High fines.",
-      "Cyprus": "Drink driving: 0.05%. Speed limits: urban 50km/h, motorways 100km/h.",
-      "UAE": "Drink driving: 0.0% (zero tolerance). Severe penalties including jail.",
-      "Thailand": "Drink driving: 0.05%. Speed limits: urban 80km/h, motorways 120km/h.",
-      "Malaysia": "Drink driving: 0.08%. Speed limits: urban 90km/h.",
-      "Panama": "Drink driving: 0.05%. Speed limits: urban 50km/h."
-    };
-
     function startApp() {
       currentPhase = 0;
       userData = {};
@@ -175,13 +132,19 @@
       } else if (phase.type === "range") {
         const symbol = phase.id === 'income' ? '£' : '';
         const extra = phase.id === 'age' ? ' years' : '';
+        const defaultValue = phase.min;
         html += `<label>${phase.title}</label>
-                 <div class="slider-value">\( {symbol}0 \){extra}</div>
-                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value="0" id=" \){phase.id}" oninput="this.previousElementSibling.innerText = '\( {symbol}' + this.value.toLocaleString() + ' \){extra}'">`;
+                 <div class="slider-value">\( {symbol} \){defaultValue.toLocaleString()}${extra}</div>
+                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value=" \){defaultValue}" id="\( {phase.id}" oninput="updateSliderValue(this, ' \){symbol}', '${extra}')">`;
       }
       html += `<div class="phase-result" id="${phase.id}-result"></div><button onclick="savePhase()">Continue</button></div>`;
       app.innerHTML = html;
       updateProgress();
+    }
+
+    function updateSliderValue(input, symbol, extra) {
+      const valueDisplay = input.previousElementSibling;
+      valueDisplay.innerText = symbol + parseInt(input.value).toLocaleString() + extra;
     }
 
     function savePhase() {
@@ -226,30 +189,12 @@
             <p>See full comparison: <a href="https://www.numbeo.com/cost-of-living/compare_countries_result.jsp?country1=United+Kingdom&country2=${encodeURIComponent(destination)}" target="_blank">Numbeo</a></p>
           </div>
           <div class="section">
-            <h3>In-Depth Tax Overview for ${destination}</h3>
-            <p>${taxData[destination] || "Favourable for expats – territorial or low rates."}</p>
-          </div>
-          <div class="section">
-            <h3>Local Laws & Rules</h3>
-            <p>${lawsData[destination] || "Standard rules – check official sources."}</p>
-          </div>
-          <div class="section">
             <h3>Expat Community Hub</h3>
             <p>InterNations, Facebook groups, Meetup, Reddit r/IWantOut & r/expats.</p>
             <button onclick="alert('Finding locals in ${destination}...')">Find Locals</button>
           </div>
-          <div class="section">
-            <h3>Interactive Moving Checklist</h3>
-            <ul class="checklist">
-              <li><input type="checkbox"><label>Passport valid 6+ months</label></li>
-              <li><input type="checkbox"><label>Visa application</label></li>
-              <li><input type="checkbox"><label>Health insurance</label></li>
-              <li><input type="checkbox"><label>Bank account setup</label></li>
-              <li><input type="checkbox"><label>Find accommodation</label></li>
-            </ul>
-          </div>
           <button class="buy">UNLOCK PREMIUM PACK – ONLY £9.97</button>
-          <p>100+ page PDF guide, checklists, templates, lawyer contacts, 2026 updates, exclusive community, priority support.</p>
+          <p>Full in-depth tax, laws, visa table, checklist, pet guide, mental health, currency converter, and more!</p>
         </div>
       `;
       confetti({particleCount: 200, spread: 70, origin: { y: 0.6 }});
