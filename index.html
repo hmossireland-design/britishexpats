@@ -31,8 +31,9 @@
     table {width:100%;border-collapse:collapse;margin:1rem 0;}
     th, td {padding:1rem;text-align:left;border-bottom:1px solid #ddd;}
     th {background:#ff8c00;color:white;}
+    .checklist {list-style:none;}
     .checklist li {margin:0.8rem 0;padding-left:2.5rem;position:relative;}
-    .checklist input[type="checkbox"] {position:absolute;left:0;top:0.2rem;}
+    .checklist input[type="checkbox"] {position:absolute;left:0;top:0.2rem;width:1.8rem;height:1.8rem;}
     @media (max-width:600px) {h1{font-size:2.8rem;}.hero p{font-size:1.4rem;}}
   </style>
 </head>
@@ -76,41 +77,43 @@
     const costData = {
       "Portugal": {monthly: 1800},
       "Spain": {monthly: 1900},
-      "Ireland": {monthly: 2800},
-      "Australia": {monthly: 2800},
       "Cyprus": {monthly: 2000},
-      "Malta": {monthly: 2200},
-      "France": {monthly: 2100},
       "UAE": {monthly: 2500},
       "Thailand": {monthly: 1200},
-      "Italy": {monthly: 2000},
-      "Greece": {monthly: 1600},
-      "Canada": {monthly: 2200},
-      "New Zealand": {monthly: 2500},
       "Malaysia": {monthly: 1000},
       "Panama": {monthly: 1500},
-      "Mexico": {monthly: 1200},
-      "Costa Rica": {monthly: 1500},
-      "Hungary": {monthly: 1300},
-      "Poland": {monthly: 1400},
-      "Slovenia": {monthly: 1600},
-      "Slovakia": {monthly: 1400},
-      "Bulgaria": {monthly: 1000},
-      "Indonesia": {monthly: 900},
-      "Colombia": {monthly: 900},
-      "Mauritius": {monthly: 1400},
-      "Belize": {monthly: 1500},
-      "Ecuador": {monthly: 1000},
-      "Uruguay": {monthly: 1800},
-      "Chile": {monthly: 1300},
-      "Latvia": {monthly: 1400}
+      "UK": {monthly: 2500}
     };
 
     const taxData = {
-      "Portugal": "Income Tax: Progressive 14.5-48% (NHR 2.0: flat 20% foreign income). Capital Gains: 28%. Property CGT: 50% inclusion. Annual Property Tax: 0.3-0.8%. Buying: IMT 6-8%. Crypto: 28%. Pensions often favourable.",
-      "UAE": "Income Tax: 0%. Capital Gains: 0%. Property Tax: Low/none. Crypto: 0%. Tax haven.",
+      "Portugal": "Income Tax: Progressive 14.5-48% (NHR 2.0: flat 20% foreign income). Capital Gains: 28%. Property CGT: 50% inclusion. Annual Property Tax: 0.3-0.8%. Crypto: 28%. Pensions favourable.",
+      "Spain": "Income Tax: 19-47%. Capital Gains: 19-28%. Property added to income. Annual Property Tax: IBI 0.4-1.1%. Crypto: 19-28%.",
       "Cyprus": "Income Tax: 0-35% (first €19,500 exempt). Non-dom: Exempt dividends/interest. Capital Gains: 20% property only. Crypto: Passive untaxed.",
-      // Add all countries as before
+      "UAE": "Income Tax: 0%. Capital Gains: 0%. Crypto: 0%. Tax haven.",
+      "Thailand": "Income Tax: 0-35%. Capital Gains: Often exempt. Crypto: Exempt certain platforms.",
+      "Malaysia": "Income Tax: 0-30%. Capital Gains: 0% general. Crypto: Casual untaxed.",
+      "Panama": "Territorial tax – foreign income exempt. Local income 0-25%. Capital Gains: 10%."
+      // Add more as needed
+    };
+
+    const lawsData = {
+      "Portugal": "Drink driving: 0.05%. Speed limits: urban 50km/h, motorways 120km/h. Fines: parking €60-300, smoking bans.",
+      "Spain": "Drink driving: 0.05%. Speed limits: urban 50km/h, motorways 120km/h. Fines high.",
+      "Cyprus": "Drink driving: 0.05%. Speed limits: urban 50km/h, motorways 100km/h.",
+      "UAE": "Drink driving: 0.0%. Strict fines/prison.",
+      "Thailand": "Drink driving: 0.05%. Speed limits: urban 80km/h.",
+      "Malaysia": "Drink driving: 0.08%. Speed limits: urban 90km/h.",
+      "Panama": "Drink driving: 0.05%. Speed limits: urban 50km/h."
+    };
+
+    const visaData = {
+      "Portugal": "D7 Visa: €870/mo min income, no age limit, PR after 5 years.",
+      "Spain": "Non-Lucrative: €2,400/mo, no age, PR 5 years.",
+      "Cyprus": "Category F: Income/property proof, PR 5 years.",
+      "UAE": "Retirement Visa: 55+, $3,500/mo or property.",
+      "Thailand": "LTR/Elite: Income/deposit, 50+ for some.",
+      "Malaysia": "MM2H: Deposit/income, no age.",
+      "Panama": "Pensionado: $1,000/mo pension, immediate PR."
     };
 
     function startApp() {
@@ -135,7 +138,11 @@
         phase.options.forEach(o => html += `<option>${o}</option>`);
         html += `</select>`;
       } else if (phase.type === "range") {
-        html += `<label>\( {phase.title}</label><input type="range" min=" \){phase.min}" max="\( {phase.max}" step=" \){phase.step}" value="0" id="\( {phase.id}" oninput="document.getElementById(' \){phase.id}Value').innerText = (phase.id === 'age' ? this.value + ' years' : '£' + this.value.toLocaleString())"><span id="${phase.id}Value">£0</span>`;
+        const symbol = phase.id === 'income' ? '£' : '';
+        const extra = phase.id === 'age' ? ' years' : '';
+        html += `<label>${phase.title}</label>
+                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value=" \){phase.min}" id="\( {phase.id}" oninput="this.nextElementSibling.innerText = ' \){symbol}' + this.value.toLocaleString() + '${extra}'">
+                 <span>\( {symbol} \){phase.min.toLocaleString()}${extra}</span>`;
       }
       html += `<div class="phase-result" id="${phase.id}-result"></div><button onclick="savePhase()">Continue</button></div>`;
       app.innerHTML = html;
@@ -145,9 +152,10 @@
     function savePhase() {
       const phase = phases[currentPhase];
       const input = document.getElementById(phase.id);
-      const val = input.value;
-      if (!val && phase.type !== "range") return alert("Please complete this step");
-      userData[phase.id] = val || "0";
+      let val = input.value;
+      if (phase.type === "range") val = parseInt(val);
+      if (!val && val !== 0) return alert("Please complete this step");
+      userData[phase.id] = val;
       const result = document.getElementById(phase.id + "-result");
       result.innerHTML = `<strong>${val}</strong>`;
       result.style.display = "block";
@@ -171,24 +179,46 @@
           <h2>🎉 Your 2026 Personalised Relocation Report</h2>
           <div class="result">Potential annual cost savings: <strong>£${annualSavings.toLocaleString()}</strong> in ${destination}!</div>
           <div class="section">
-            <h3>Cost of Living Comparison</h3>
-            <p>UK: £${ukMonthly.toLocaleString()} vs \( {destination}: £ \){monthlyCost.toLocaleString()} (save £${monthlySavings.toLocaleString()}/month)</p>
-            <p>See detailed comparison: <a href="https://www.numbeo.com/cost-of-living/compare_countries_result.jsp?country1=United+Kingdom&country2=${encodeURIComponent(destination)}" target="_blank">Numbeo UK vs ${destination}</a></p>
+            <h3>Cost of Living Comparison (Monthly for Couple)</h3>
+            <table>
+              <tr><th>Category</th><th>UK</th><th>${destination}</th><th>Savings</th></tr>
+              <tr><td>Rent</td><td>£1,200</td><td>£700</td><td>£500</td></tr>
+              <tr><td>Food</td><td>£400</td><td>£250</td><td>£150</td></tr>
+              <tr><td>Transport</td><td>£200</td><td>£80</td><td>£120</td></tr>
+              <tr><td>Utilities</td><td>£150</td><td>£100</td><td>£50</td></tr>
+              <tr><td>Total</td><td>£2,500</td><td>£1,460</td><td>£1,040</td></tr>
+            </table>
+            <p>See full comparison: <a href="https://www.numbeo.com/cost-of-living/compare_countries_result.jsp?country1=United+Kingdom&country2=${encodeURIComponent(destination)}" target="_blank">Numbeo</a></p>
           </div>
           <div class="section">
-            <h3>Tax Overview for Expats in ${destination}</h3>
-            <p>${taxData[destination] || "Favourable for expats – check latest."}</p>
+            <h3>In-Depth Tax Overview for ${destination}</h3>
+            <p>${taxData[destination] || "Favourable for expats – territorial or low rates."}</p>
           </div>
           <div class="section">
             <h3>Local Laws & Rules</h3>
-            <p>Drink driving limit: 0.05% (most EU). Speed limits: urban 50km/h, motorways 120km/h. Common fines: parking €100+, smoking bans.</p>
+            <p>${lawsData[destination] || "Standard EU/territorial rules – check official sources."}</p>
+          </div>
+          <div class="section">
+            <h3>Visa & Immigration</h3>
+            <p>${visaData[destination] || "Retirement/digital nomad visa available."}</p>
           </div>
           <div class="section">
             <h3>Expat Community Hub</h3>
-            <p>Join InterNations, Facebook expat groups, Meetup, Reddit r/IWantOut & r/expats.</p>
+            <p>InterNations, Facebook groups, Meetup, Reddit r/IWantOut & r/expats.</p>
             <button onclick="alert('Finding locals in ${destination}...')">Find Locals</button>
           </div>
+          <div class="section">
+            <h3>Interactive Moving Checklist</h3>
+            <ul class="checklist">
+              <li><input type="checkbox"><label>Passport valid 6+ months</label></li>
+              <li><input type="checkbox"><label>Visa application</label></li>
+              <li><input type="checkbox"><label>Health insurance</label></li>
+              <li><input type="checkbox"><label>Bank account setup</label></li>
+              <li><input type="checkbox"><label>Find accommodation</label></li>
+            </ul>
+          </div>
           <button class="buy">UNLOCK PREMIUM PACK – ONLY £9.97</button>
+          <p>100+ page PDF guide, checklists, templates, lawyer contacts, 2026 updates, exclusive community, priority support.</p>
         </div>
       `;
       confetti({particleCount: 200, spread: 70, origin: { y: 0.6 }});
