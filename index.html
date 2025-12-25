@@ -1,302 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BRITS ABROAD 2026 – Your Sunshine Relocation Adventure</title>
-
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-
-    body {
-      background:#fffbe6;
-      color:#333;
-      line-height:1.6;
-      background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80')
-      center/cover fixed;
-    }
-
-    .hero {
-      position:relative;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      color:#fff;
-    }
-
-    .hero::before {
-      content:'';
-      position:absolute;
-      inset:0;
-      background:rgba(0,0,0,0.45);
-    }
-
-    .hero-content {
-      position:relative;
-      z-index:1;
-      max-width:800px;
-      padding:2rem;
-    }
-
-    h1 {
-      font-size:3.2rem;
-      margin-bottom:1rem;
-    }
-
-    .hero p {
-      font-size:1.6rem;
-      margin-bottom:2rem;
-    }
-
-    button {
-      background:#ff8c00;
-      color:white;
-      padding:1rem 2.2rem;
-      border:none;
-      border-radius:40px;
-      font-size:1.2rem;
-      cursor:pointer;
-      transition:0.3s;
-    }
-
-    button:hover {
-      background:#ff6b00;
-      transform:scale(1.05);
-    }
-
-    #progress-wrapper {
-      max-width:900px;
-      margin:2rem auto;
-      padding:0 1rem;
-    }
-
-    #progress-text {
-      text-align:center;
-      font-weight:bold;
-      margin-bottom:0.5rem;
-      color:#ff8c00;
-    }
-
-    #progress-bar {
-      height:20px;
-      background:#fff;
-      border-radius:20px;
-      overflow:hidden;
-    }
-
-    #progress-fill {
-      height:100%;
-      width:0%;
-      background:linear-gradient(to right,#ff8c00,#ffd700);
-      transition:width 0.5s ease;
-    }
-
-    #app {
-      max-width:900px;
-      margin:0 auto;
-      padding:1rem;
-    }
-
-    .phase-card {
-      background:rgba(255,255,255,0.95);
-      padding:2.5rem;
-      border-radius:25px;
-      box-shadow:0 15px 40px rgba(0,0,0,0.15);
-      margin-bottom:3rem;
-      text-align:center;
-    }
-
-    .phase-card h2 {
-      font-size:2rem;
-      margin-bottom:1.5rem;
-      color:#ff8c00;
-    }
-
-    select, input[type="range"] {
-      width:100%;
-      padding:0.9rem;
-      font-size:1.1rem;
-      border-radius:20px;
-      border:2px solid #ff8c00;
-      margin-bottom:1.5rem;
-    }
-
-    .slider-value {
-      font-size:1.8rem;
-      font-weight:bold;
-      color:#ff8c00;
-      margin-bottom:1rem;
-    }
-
-    .result {
-      font-size:2rem;
-      background:linear-gradient(to right,#ff8c00,#ffd700);
-      color:white;
-      padding:2rem;
-      border-radius:25px;
-      margin:2rem 0;
-    }
-
-    .startover {
-      position:fixed;
-      bottom:20px;
-      right:20px;
-      background:#d32f2f;
-    }
-
-    @media(max-width:600px){
-      h1 { font-size:2.4rem; }
-      .hero p { font-size:1.3rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRITS ABROAD 2026 – Your Sunshine Relocation Adventure</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body {background:#fffbe6;color:#333;line-height:1.6;}
+.hero {position:relative;height:60vh;background:#ff8c00;color:white;text-align:center;display:flex;align-items:center;justify-content:center;}
+.hero-content {padding:2rem;}
+h1 {font-size:2.5rem;margin-bottom:1rem;}
+button {background:#ff8c00;color:white;padding:1rem 2rem;border:none;border-radius:50px;font-size:1.2rem;cursor:pointer;margin:1rem;}
+button:hover {background:#ff6b00;}
+button.startover {position:fixed;bottom:20px;right:20px;background:#d32f2f;}
+#progress-wrapper {max-width:900px;margin:2rem auto;padding:0 1rem;}
+#progress-text {font-weight:bold;margin-bottom:0.5rem;text-align:center;}
+#progress-bar {height:20px;background:#fff;border-radius:25px;overflow:hidden;}
+#progress-fill {height:100%;background:linear-gradient(to right, #ff8c00, #ffd700);width:0%;transition:width 0.5s;}
+#app {max-width:900px;margin:0 auto;padding:1rem;}
+.phase-card {background:rgba(255,255,255,0.9);padding:2rem;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,0.1);margin-bottom:2rem;text-align:center;}
+.phase-card h2 {color:#ff8c00;margin-bottom:1rem;}
+.phase-card select,.phase-card input[type="range"] {width:90%;padding:0.5rem;margin:1rem 0;border-radius:10px;border:2px solid #ff8c00;}
+.slider-value {font-size:1.5rem;color:#ff8c00;margin-bottom:1rem;}
+.phase-result {background:#fffbe6;padding:1rem;border-left:5px solid #ffd700;margin-top:1rem;display:none;}
+.result {font-size:1.5rem;background:linear-gradient(to right,#ff8c00,#ffd700);color:white;padding:1rem;border-radius:20px;margin-top:2rem;}
+.section {background:rgba(232,245,233,0.9);padding:1rem;border-radius:10px;margin:1rem 0;border-left:5px solid #ffd700;text-align:left;}
+</style>
 </head>
-
 <body>
 
-  <div class="hero">
-    <div class="hero-content">
-      <h1>BRITS ABROAD 2026 🌍</h1>
-      <p>Your personalised relocation & lifestyle planner</p>
-      <button id="start-btn">Start Your Journey</button>
+<div class="hero">
+  <div class="hero-content">
+    <h1>BRITS ABROAD 2026 🌴☀️</h1>
+    <p>For retirees, remote workers, families & everyone – your dream life awaits!</p>
+    <button id="start-btn">Start Your Adventure</button>
+  </div>
+</div>
+
+<div id="progress-wrapper">
+  <div id="progress-text">Ready to start?</div>
+  <div id="progress-bar"><div id="progress-fill"></div></div>
+</div>
+
+<div id="app"></div>
+<button class="startover" id="startover-btn">Start Over</button>
+
+<script>
+const app = document.getElementById("app");
+let currentPhase = 0;
+let userData = {};
+
+const phases = [
+  {title: "🌍 Dream Destination", id: "destination", type: "select", options: ["Portugal","Spain","Cyprus"]},
+  {title: "💼 Your Situation", id: "situation", type: "select", options: ["Retired with pension","Remote/digital nomad","Working abroad"]},
+  {title: "💰 Monthly Income (£)", id: "income", type: "range", min:0, max:20000, step:500},
+  {title: "👴 Your Age", id: "age", type: "range", min:18, max:85, step:1},
+  {title: "🏥 Healthcare Needs", id: "health", type: "select", options: ["Good health","Pre-existing conditions","Family coverage needed"]},
+  {title: "Final Report", type:"final"}
+];
+
+const countryInfo = {
+  "Portugal": { visa:["Retirement","Work/Remote","Investment"], tax:{incomeTax:"20–48%", socialSecurity:"11%"} },
+  "Spain": { visa:["Retirement","Work/Remote","Investment"], tax:{incomeTax:"19–47%", socialSecurity:"6.35–30%"} },
+  "Cyprus": { visa:["Retirement","Work/Remote","Investment"], tax:{incomeTax:"0–35%", socialSecurity:"7.8%"} }
+};
+
+const costData = { "Portugal":1800,"Spain":1900,"Cyprus":2000 };
+
+function startApp() {
+  currentPhase = 0;
+  userData = {};
+  renderPhase();
+}
+document.getElementById("start-btn").addEventListener("click", startApp);
+document.getElementById("startover-btn").addEventListener("click", startApp);
+
+function renderPhase() {
+  app.innerHTML = "";
+  if (currentPhase >= phases.length-1) { showFinal(); return; }
+  const phase = phases[currentPhase];
+  let html = `<div class="phase-card"><h2>${phase.title}</h2>`;
+  
+  if (phase.type==="select") {
+    html += `<select id="${phase.id}"><option value="">-- Choose --</option>`;
+    phase.options.forEach(o=>html+=`<option value="${o}">${o}</option>`);
+    html += `</select>`;
+  } else if (phase.type==="range") {
+    const symbol = phase.id==='income'?'£':'';
+    const extra = phase.id==='age'?' years':'';
+    html += `<div class="slider-value" id="${phase.id}-value">${symbol}${phase.min}${extra}</div>`;
+    html += `<input type="range" min="${phase.min}" max="${phase.max}" step="${phase.step}" value="${phase.min}" id="${phase.id}" 
+              oninput="document.getElementById('${phase.id}-value').innerText='${symbol}'+this.value+'${extra}'">`;
+  }
+
+  html += `<div class="phase-result" id="${phase.id}-result"></div><button onclick="savePhase()">Continue</button></div>`;
+  app.innerHTML = html;
+  updateProgress();
+}
+
+function savePhase() {
+  const phase = phases[currentPhase];
+  const input = document.getElementById(phase.id);
+  let val = input.value;
+  if (phase.type==="range") val = Number(val);
+  if (val==="" || val===null) return alert("Please complete this step");
+  userData[phase.id] = val;
+  const result = document.getElementById(phase.id+"-result");
+  result.style.display="block";
+  result.innerHTML = `<strong>${val}</strong>`;
+  currentPhase++;
+  renderPhase();
+}
+
+function updateProgress() {
+  document.getElementById("progress-text").innerText = `Phase ${currentPhase+1} of ${phases.length}`;
+  document.getElementById("progress-fill").style.width = ((currentPhase+1)/phases.length*100) + "%";
+}
+
+function showFinal() {
+  const country = userData.destination || "Portugal";
+  const monthlyCost = costData[country] || 1800;
+  const annualSavings = (2500 - monthlyCost)*12;
+  const info = countryInfo[country];
+  const visaText = info?.visa?.join(", ") || "General visa rules apply";
+  const taxText = info?.tax ? `Income Tax: ${info.tax.incomeTax}, Social Security: ${info.tax.socialSecurity}` : "General tax info";
+
+  app.innerHTML = `
+    <div class="phase-card">
+      <h2>🎉 Your 2026 Personalised Relocation Report</h2>
+      <div class="result">Potential annual cost savings: <strong>£${annualSavings.toLocaleString()}</strong> in ${country}!</div>
+      <div class="section">
+        <h3>Visa Options</h3><p>${visaText}</p>
+      </div>
+      <div class="section">
+        <h3>Tax Overview</h3><p>${taxText}</p>
+      </div>
     </div>
-  </div>
-
-  <div id="progress-wrapper">
-    <div id="progress-text">Ready to begin</div>
-    <div id="progress-bar"><div id="progress-fill"></div></div>
-  </div>
-
-  <div id="app"></div>
-
-  <button class="startover" id="startover-btn">Start Over</button>
-
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <script>
-    const app = document.getElementById("app");
-    let currentPhase = 0;
-    let userData = {};
-
-    const phases = [
-      { title:"🌍 Dream Destination", id:"destination", type:"select",
-        options:["Portugal","Spain","France","Italy","Greece","Cyprus","Malta","UAE","Thailand","Mexico","Canada","Australia"] },
-
-      { title:"💼 Your Situation", id:"situation", type:"select",
-        options:["Retired","Remote worker","Working abroad","Family move","Just exploring"] },
-
-      { title:"💰 Monthly Income (£)", id:"income", type:"range", min:0, max:20000, step:500 },
-
-      { title:"👴 Your Age", id:"age", type:"range", min:18, max:85, step:1 },
-
-      { title:"👨‍👩‍👧 Family Joining?", id:"family", type:"select",
-        options:["No","Spouse","Spouse + children","Extended family"] },
-
-      { title:"🏥 Healthcare Preference", id:"health", type:"select",
-        options:["Private","Public","Mixed"] },
-
-      { title:"📅 Move Timeline", id:"timeline", type:"select",
-        options:["< 6 months","6–12 months","1–2 years","Just exploring"] },
-
-      { title:"🎯 Lifestyle Priority", id:"priority", type:"select",
-        options:["Low cost","Warm climate","Tax efficiency","English speaking","City life"] },
-
-      { title:"Final Report", type:"final" }
-    ];
-
-    function startApp(){
-      currentPhase = 0;
-      userData = {};
-      renderPhase();
-    }
-
-    document.getElementById("start-btn").onclick = startApp;
-    document.getElementById("startover-btn").onclick = startApp;
-
-    function renderPhase(){
-      app.innerHTML = "";
-
-      if(currentPhase >= phases.length - 1){
-        showFinal();
-        return;
-      }
-
-      const phase = phases[currentPhase];
-      let html = `<div class="phase-card"><h2>${phase.title}</h2>`;
-
-      if(phase.type === "select"){
-        html += `<select id="${phase.id}"><option value="">Choose</option>`;
-        phase.options.forEach(o => html += `<option value="${o}">${o}</option>`);
-        html += `</select>`;
-      }
-
-      if(phase.type === "range"){
-        const symbol = phase.id === "income" ? "£" : "";
-        const suffix = phase.id === "age" ? " years" : "";
-        const value = phase.min;
-
-        html += `
-          <div class="slider-value" id="${phase.id}-value">
-            ${symbol}${value.toLocaleString()}${suffix}
-          </div>
-          <input type="range"
-            id="${phase.id}"
-            min="${phase.min}"
-            max="${phase.max}"
-            step="${phase.step}"
-            value="${value}"
-            oninput="document.getElementById('${phase.id}-value').innerText =
-              '${symbol}' + Number(this.value).toLocaleString() + '${suffix}'">
-        `;
-      }
-
-      html += `<button onclick="savePhase()">Continue</button></div>`;
-      app.innerHTML = html;
-      updateProgress();
-    }
-
-    function savePhase(){
-      const phase = phases[currentPhase];
-      const el = document.getElementById(phase.id);
-      let val = el ? el.value : null;
-
-      if(phase.type === "range") val = Number(val);
-      if(val === "" || val === null) return alert("Please complete this step");
-
-      userData[phase.id] = val;
-      currentPhase++;
-      renderPhase();
-    }
-
-    function updateProgress(){
-      document.getElementById("progress-text").innerText =
-        `Step ${currentPhase + 1} of ${phases.length}`;
-      document.getElementById("progress-fill").style.width =
-        ((currentPhase + 1) / phases.length * 100) + "%";
-    }
-
-    function showFinal(){
-      const destination = userData.destination || "Portugal";
-      const income = userData.income || 0;
-
-      app.innerHTML = `
-        <div class="phase-card">
-          <h2>🎉 Your Relocation Summary</h2>
-          <div class="result">
-            Destination: <strong>${destination}</strong><br>
-            Monthly income: <strong>£${income.toLocaleString()}</strong>
-          </div>
-          <p>This is your foundation report. Next steps will include
-          country-specific visa rules, tax exposure, healthcare systems,
-          and banking setup.</p>
-        </div>
-      `;
-
-      confetti({ particleCount:150, spread:70, origin:{ y:0.6 } });
-      updateProgress();
-    }
-  </script>
-
+  `;
+}
+</script>
 </body>
 </html>
