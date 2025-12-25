@@ -135,11 +135,16 @@
         const defaultValue = phase.min;
         html += `<label>${phase.title}</label>
                  <div class="slider-value">\( {symbol} \){defaultValue.toLocaleString()}${extra}</div>
-                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value=" \){defaultValue}" id="\( {phase.id}" oninput="this.previousElementSibling.innerText = ' \){symbol}' + Number(this.value).toLocaleString() + '${extra}'">`;
+                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value=" \){defaultValue}" id="\( {phase.id}" oninput="updateSlider(this, ' \){symbol}', '${extra}')">`;
       }
       html += `<div class="phase-result" id="${phase.id}-result"></div><button onclick="savePhase()">Continue</button></div>`;
       app.innerHTML = html;
       updateProgress();
+    }
+
+    function updateSlider(input, symbol, extra) {
+      const valueDisplay = input.previousElementSibling;
+      valueDisplay.innerText = symbol + Number(input.value).toLocaleString() + extra;
     }
 
     function savePhase() {
