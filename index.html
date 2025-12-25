@@ -135,23 +135,18 @@
         const defaultValue = phase.min;
         html += `<label>${phase.title}</label>
                  <div class="slider-value">\( {symbol} \){defaultValue.toLocaleString()}${extra}</div>
-                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value=" \){defaultValue}" id="\( {phase.id}" oninput="updateSliderValue(this, ' \){symbol}', '${extra}')">`;
+                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value=" \){defaultValue}" id="\( {phase.id}" oninput="this.previousElementSibling.innerText = ' \){symbol}' + Number(this.value).toLocaleString() + '${extra}'">`;
       }
       html += `<div class="phase-result" id="${phase.id}-result"></div><button onclick="savePhase()">Continue</button></div>`;
       app.innerHTML = html;
       updateProgress();
     }
 
-    function updateSliderValue(input, symbol, extra) {
-      const valueDisplay = input.previousElementSibling;
-      valueDisplay.innerText = symbol + parseInt(input.value).toLocaleString() + extra;
-    }
-
     function savePhase() {
       const phase = phases[currentPhase];
       const input = document.getElementById(phase.id);
       let val = input.value;
-      if (phase.type === "range") val = parseInt(val);
+      if (phase.type === "range") val = Number(val);
       if (!val && val !== 0) return alert("Please complete this step");
       userData[phase.id] = val;
       const result = document.getElementById(phase.id + "-result");
