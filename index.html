@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BRITS ABROAD 2026 – Relocation Planner</title>
 <style>
-/* All previous CSS remains unchanged */
+/* Basic styling */
 * {margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 body {background:#fffbe6;color:#333;line-height:1.6;}
 header {text-align:center;padding:2rem;background:#ff8c00;color:white;}
@@ -14,7 +14,7 @@ header p {font-size:1.2rem;}
 #progress-wrapper {max-width:900px;margin:2rem auto;}
 #progress-text {font-weight:bold;margin-bottom:0.5rem;text-align:center;color:#ff8c00;}
 #progress-bar {height:25px;background:#fff;border-radius:25px;overflow:hidden;box-shadow:inset 0 2px 10px rgba(0,0,0,0.1);}
-#progress-fill {height:100%;background:linear-gradient(to right,#ff8c00,#ffd700);width:0%;transition:width 0.5s;}
+#progress-fill {height:100%;background:linear-gradient(to right,#ff8c00,#ffd700);width:0%;transition:0.5s;}
 #app {max-width:900px;margin:2rem auto;padding:1rem;}
 .phase-card {background:rgba(255,255,255,0.95);padding:2rem;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,0.15);margin-bottom:2rem;}
 .phase-card h2 {color:#ff8c00;margin-bottom:1rem;}
@@ -50,7 +50,7 @@ const app = document.getElementById("app");
 let currentPhase = 0;
 let userData = {};
 
-// Countries with flags
+// Countries list with flags
 const countries = [
   {name:"Portugal",flag:"🇵🇹"},{name:"Spain",flag:"🇪🇸"},{name:"Ireland",flag:"🇮🇪"},
   {name:"Australia",flag:"🇦🇺"},{name:"Cyprus",flag:"🇨🇾"},{name:"Malta",flag:"🇲🇹"},
@@ -64,41 +64,41 @@ const countries = [
   {name:"Uruguay",flag:"🇺🇾"},{name:"Chile",flag:"🇨🇱"},{name:"Latvia",flag:"🇱🇻"}
 ];
 
-// Country rules
+// Country visa, tax, costs
 const countryRules = {
-  "Portugal": {visa:"Residence Permit / D7",tax:"Flat 20% NHR, otherwise progressive",cost:1800,url:"https://www.portugal.gov.pt/en/guides"},
-  "Spain": {visa:"Residence Visa / Non-Lucrative",tax:"Progressive 19–45%",cost:1900,url:"https://www.exteriores.gob.es/en"},
-  "Ireland": {visa:"Work / Stamp 0-4",tax:"Progressive 20–40%",cost:2800,url:"https://www.irishimmigration.ie/"},
-  "Australia": {visa:"Subclass 188/189/190",tax:"Progressive 19–45%",cost:2800,url:"https://immi.homeaffairs.gov.au/"},
-  "Cyprus": {visa:"Temporary Residency / Permanent",tax:"Progressive 20–35%",cost:2000,url:"https://www.moi.gov.cy/"},
-  "Malta": {visa:"Maltese Residence Permit",tax:"Flat 15% remittance",cost:2200,url:"https://www.identitymalta.com/"},
-  "France": {visa:"Long-stay visa",tax:"Progressive 14–45%",cost:2100,url:"https://france-visas.gouv.fr/"},
-  "UAE": {visa:"Residence / Work",tax:"0% personal income tax",cost:2500,url:"https://u.ae/en/information-and-services/visa-and-emirates-id"},
-  "Thailand": {visa:"O-A / Business",tax:"0–35%",cost:1200,url:"https://www.thaiembassy.com/"},
-  "Italy": {visa:"Elective Residency",tax:"Progressive 23–43%",cost:2000,url:"https://vistoperitalia.esteri.it/home/en"},
-  "Greece": {visa:"Financial / Retirement",tax:"15–45%",cost:1600,url:"https://www.mfa.gr/en/"},
-  "Canada": {visa:"Work / PR",tax:"15–33% federal + provincial",cost:2200,url:"https://www.canada.ca/en/immigration-refugees-citizenship.html"},
-  "New Zealand": {visa:"Work / Investor",tax:"10–33%",cost:2500,url:"https://www.immigration.govt.nz/"},
-  "Malaysia": {visa:"MM2H",tax:"0–24%",cost:1000,url:"https://www.mm2h.gov.my/"},
-  "Panama": {visa:"Pensionado / Friendly Nations",tax:"0–25%",cost:1500,url:"https://www.migracion.gob.pa/"},
-  "Mexico": {visa:"Temporary Resident",tax:"1.92–35%",cost:1200,url:"https://www.gob.mx/inm"},
-  "Costa Rica": {visa:"Pensionado / Rentista",tax:"0–25%",cost:1500,url:"https://www.rree.go.cr/"},
-  "Hungary": {visa:"Residence / Work",tax:"15% flat",cost:1300,url:"https://www.bmbah.hu/"},
-  "Poland": {visa:"Temporary / Work",tax:"17–32%",cost:1400,url:"https://www.gov.pl/web/diplomacy"},
-  "Slovenia": {visa:"Residence / Work",tax:"16–50%",cost:1600,url:"https://www.gov.si/en/"},
-  "Slovakia": {visa:"Residence / Work",tax:"19–25%",cost:1400,url:"https://www.mzv.sk/en"},
-  "Bulgaria": {visa:"Permanent / Work",tax:"10% flat",cost:1000,url:"https://www.mfa.bg/en/"},
-  "Indonesia": {visa:"KITAS / Retirement",tax:"5–30%",cost:900,url:"https://www.kemlu.go.id/"},
-  "Colombia": {visa:"Migrant / Resident",tax:"0–35%",cost:900,url:"https://www.cancilleria.gov.co/"},
-  "Mauritius": {visa:"Occupation Permit",tax:"15% flat",cost:1400,url:"https://www.govmu.org/"},
-  "Belize": {visa:"Temporary / Permanent",tax:"25%",cost:1500,url:"https://www.mfa.gov.bz/"},
-  "Ecuador": {visa:"Pension / Investor",tax:"0–35%",cost:1000,url:"https://www.cancilleria.gob.ec/"},
-  "Uruguay": {visa:"Temporary / Resident",tax:"10–25%",cost:1800,url:"https://www.gub.uy/"},
-  "Chile": {visa:"Temporary / Resident",tax:"0–40%",cost:1300,url:"https://chile.gob.cl/"},
-  "Latvia": {visa:"Residence / Work",tax:"20%",cost:1400,url:"https://www.pmlp.gov.lv/en"}
+  "Portugal": {visa:"Residence Permit / D7",tax:"Flat 20% NHR, otherwise progressive",cost:1800,breakdown:{rent:700,food:250,transport:80,utilities:50},url:"https://www.portugal.gov.pt/en/guides"},
+  "Spain": {visa:"Residence Visa / Non-Lucrative",tax:"Progressive 19–45%",cost:1900,breakdown:{rent:800,food:300,transport:90,utilities:60},url:"https://www.exteriores.gob.es/en"},
+  "Ireland": {visa:"Work / Stamp 0-4",tax:"Progressive 20–40%",cost:2800,breakdown:{rent:1200,food:400,transport:200,utilities:150},url:"https://www.irishimmigration.ie/"},
+  "Australia": {visa:"Subclass 188/189/190",tax:"Progressive 19–45%",cost:2800,breakdown:{rent:1200,food:400,transport:200,utilities:150},url:"https://immi.homeaffairs.gov.au/"},
+  "Cyprus": {visa:"Temporary Residency / Permanent",tax:"Progressive 20–35%",cost:2000,breakdown:{rent:800,food:300,transport:100,utilities:80},url:"https://www.moi.gov.cy/"},
+  "Malta": {visa:"Maltese Residence Permit",tax:"Flat 15% remittance",cost:2200,breakdown:{rent:900,food:350,transport:120,utilities:90},url:"https://www.identitymalta.com/"},
+  "France": {visa:"Long-stay visa",tax:"Progressive 14–45%",cost:2100,breakdown:{rent:900,food:350,transport:120,utilities:80},url:"https://france-visas.gouv.fr/"},
+  "UAE": {visa:"Residence / Work",tax:"0% personal income tax",cost:2500,breakdown:{rent:1200,food:500,transport:300,utilities:100},url:"https://u.ae/en/information-and-services/visa-and-emirates-id"},
+  "Thailand": {visa:"O-A / Business",tax:"0–35%",cost:1200,breakdown:{rent:400,food:300,transport:150,utilities:50},url:"https://www.thaiembassy.com/"},
+  "Italy": {visa:"Elective Residency",tax:"Progressive 23–43%",cost:2000,breakdown:{rent:800,food:300,transport:80,utilities:70},url:"https://vistoperitalia.esteri.it/home/en"},
+  "Greece": {visa:"Financial / Retirement",tax:"15–45%",cost:1600,breakdown:{rent:600,food:250,transport:80,utilities:50},url:"https://www.mfa.gr/en/"},
+  "Canada": {visa:"Work / PR",tax:"15–33% federal + provincial",cost:2200,breakdown:{rent:900,food:350,transport:200,utilities:90},url:"https://www.canada.ca/en/immigration-refugees-citizenship.html"},
+  "New Zealand": {visa:"Work / Investor",tax:"10–33%",cost:2500,breakdown:{rent:1200,food:400,transport:200,utilities:100},url:"https://www.immigration.govt.nz/"},
+  "Malaysia": {visa:"MM2H",tax:"0–24%",cost:1000,breakdown:{rent:400,food:250,transport:150,utilities:50},url:"https://www.mm2h.gov.my/"},
+  "Panama": {visa:"Pensionado / Friendly Nations",tax:"0–25%",cost:1500,breakdown:{rent:600,food:350,transport:200,utilities:50},url:"https://www.migracion.gob.pa/"},
+  "Mexico": {visa:"Temporary Resident",tax:"1.92–35%",cost:1200,breakdown:{rent:400,food:300,transport:150,utilities:50},url:"https://www.gob.mx/inm"},
+  "Costa Rica": {visa:"Pensionado / Rentista",tax:"0–25%",cost:1500,breakdown:{rent:600,food:300,transport:200,utilities:50},url:"https://www.rree.go.cr/"},
+  "Hungary": {visa:"Residence / Work",tax:"15% flat",cost:1300,breakdown:{rent:500,food:300,transport:300,utilities:50},url:"https://www.bmbah.hu/"},
+  "Poland": {visa:"Temporary / Work",tax:"17–32%",cost:1400,breakdown:{rent:600,food:300,transport:350,utilities:50},url:"https://www.gov.pl/web/diplomacy"},
+  "Slovenia": {visa:"Residence / Work",tax:"16–50%",cost:1600,breakdown:{rent:700,food:300,transport:400,utilities:50},url:"https://www.gov.si/en/"},
+  "Slovakia": {visa:"Residence / Work",tax:"19–25%",cost:1400,breakdown:{rent:600,food:300,transport:350,utilities:50},url:"https://www.mzv.sk/en"},
+  "Bulgaria": {visa:"Permanent / Work",tax:"10% flat",cost:1000,breakdown:{rent:400,food:250,transport:200,utilities:50},url:"https://www.mfa.bg/en/"},
+  "Indonesia": {visa:"KITAS / Retirement",tax:"5–30%",cost:900,breakdown:{rent:300,food:250,transport:200,utilities:50},url:"https://www.kemlu.go.id/"},
+  "Colombia": {visa:"Migrant / Resident",tax:"0–35%",cost:900,breakdown:{rent:300,food:250,transport:200,utilities:50},url:"https://www.cancilleria.gov.co/"},
+  "Mauritius": {visa:"Occupation Permit",tax:"15% flat",cost:1400,breakdown:{rent:600,food:300,transport:350,utilities:50},url:"https://www.govmu.org/"},
+  "Belize": {visa:"Temporary / Permanent",tax:"25%",cost:1500,breakdown:{rent:600,food:350,transport:400,utilities:50},url:"https://www.mfa.gov.bz/"},
+  "Ecuador": {visa:"Pension / Investor",tax:"0–35%",cost:1000,breakdown:{rent:400,food:300,transport:200,utilities:50},url:"https://www.cancilleria.gob.ec/"},
+  "Uruguay": {visa:"Temporary / Resident",tax:"10–25%",cost:1800,breakdown:{rent:700,food:350,transport:500,utilities:50},url:"https://www.gub.uy/"},
+  "Chile": {visa:"Temporary / Resident",tax:"0–40%",cost:1300,breakdown:{rent:500,food:300,transport:400,utilities:50},url:"https://chile.gob.cl/"},
+  "Latvia": {visa:"Residence / Work",tax:"20%",cost:1400,breakdown:{rent:600,food:300,transport:400,utilities:50},url:"https://www.pmlp.gov.lv/en"}
 };
 
-// App phases
+// Phases
 const phases = [
   {title:"Phase 1: Choose Destination",id:"destination",type:"select",options:countries},
   {title:"Phase 2: Age",id:"age",type:"range",min:18,max:85,step:1},
@@ -156,9 +156,10 @@ function updateProgress(){
 // Show summary
 function showSummary(){
   const dest=userData.destination||"Portugal";
-  const rules=countryRules[dest]||{visa:"N/A",tax:"N/A",cost:1800,url:"#"};
-  const ukCost=2500;
-  const monthlySavings=ukCost-rules.cost;
+  const rules=countryRules[dest]||{visa:"N/A",tax:"N/A",cost:1800,breakdown:{rent:0,food:0,transport:0,utilities:0},url:"#"};
+  const ukBreakdown={rent:1200,food:400,transport:200,utilities:150};
+  const monthlySavings=(ukBreakdown.rent+ukBreakdown.food+ukBreakdown.transport+ukBreakdown.utilities)
+                       -(rules.breakdown.rent+rules.breakdown.food+rules.breakdown.transport+rules.breakdown.utilities);
   const annualSavings=monthlySavings*12;
 
   app.innerHTML=`<div class="phase-card"><h2>🌟 Your Relocation Summary</h2>
@@ -166,16 +167,10 @@ function showSummary(){
     <p><strong>Destination:</strong> ${dest}</p>
     <p><strong>Visa:</strong> <a href="${rules.url}" target="_blank">${rules.visa}</a></p>
     <p><strong>Estimated Tax:</strong> <a href="${rules.url}" target="_blank">${rules.tax}</a></p>
-    <p><strong>Estimated Monthly Cost:</strong> £${rules.cost}</p>
-    <p><strong>Potential Monthly Savings vs UK:</strong> £${monthlySavings}</p>
-    <p><strong>Potential Annual Savings:</strong> £${annualSavings}</p>
-  </div>
-  </div>`;
-}
-
-// Start
-renderPhase();
-</script>
-
-</body>
-</html>
+    <p><strong>Monthly Cost Breakdown:</strong></p>
+    <table>
+      <tr><th>Category</th><th>UK (£)</th><th>${dest} (£)</th><th>Savings (£)</th></tr>
+      <tr><td>Rent</td><td>${ukBreakdown.rent}</td><td>${rules.breakdown.rent}</td><td>${ukBreakdown.rent-rules.breakdown.rent}</td></tr>
+      <tr><td>Food</td><td>${ukBreakdown.food}</td><td>${rules.breakdown.food}</td><td>${ukBreakdown.food-rules.breakdown.food}</td></tr>
+      <tr><td>Transport</td><td>${ukBreakdown.transport}</td><td>${rules.breakdown.transport}</td><td>${ukBreakdown.transport-rules.breakdown.transport}</td></tr>
+      <tr><td>Utilities</td><td>${ukBreak
