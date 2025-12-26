@@ -6,187 +6,244 @@
 <title>Brits Abroad 2026</title>
 
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;background:#fffbe6;color:#333}
-header{text-align:center;padding:2rem;background:#ff8c00;color:#fff}
-footer{text-align:center;padding:1rem;color:#666}
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 0;
+}
 
-#progressWrap{max-width:900px;margin:1rem auto}
-#progressText{text-align:center;font-weight:bold;margin-bottom:.4rem}
-#bar{background:#fff;border-radius:20px;height:18px;overflow:hidden}
-#fill{height:100%;width:0%;background:linear-gradient(to right,#ff8c00,#ffd700);transition:.4s}
+header {
+  background: linear-gradient(135deg,#ff9800,#ffc107);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
 
-#app{max-width:900px;margin:2rem auto;padding:1rem}
-.card{background:#fff;padding:2rem;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.1)}
-.center{text-align:center}
+#progress-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 1.5rem auto;
+}
 
-select,input[type=range]{width:100%;padding:.8rem;border-radius:10px;border:2px solid #ff8c00;margin:1rem 0}
-.value{font-size:1.6rem;color:#ff8c00}
+#progress-text {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: .5rem;
+}
 
-button{background:#ff8c00;color:#fff;border:none;border-radius:30px;padding:.8rem 2rem;font-size:1.1rem;cursor:pointer}
-button:hover{background:#ff6b00}
+#progress-bar {
+  background: #ddd;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 22px;
+}
 
-.section{background:#f9f9f9;border-left:6px solid #ffd700;padding:1rem;margin:1rem 0}
-.good{color:#2e7d32;font-weight:bold}
-.warn{color:#c62828;font-weight:bold}
+#progress-fill {
+  background: linear-gradient(90deg,#ff9800,#ffc107);
+  height: 100%;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+#app {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  margin-bottom: 2rem;
+}
+
+h2 {
+  color: #ff9800;
+}
+
+select, input[type=range] {
+  width: 100%;
+  padding: .8rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.range-value {
+  text-align: center;
+  font-size: 1.6rem;
+  margin-top: .8rem;
+  color: #ff9800;
+  font-weight: bold;
+}
+
+button {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 2rem;
+}
+
+button:hover {
+  background: #fb8c00;
+}
+
+.summary {
+  background: #fff8e1;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>BRITS ABROAD 2026 🌍</h1>
-<p>The Ultimate Relocation, Visa & Lifestyle Planner</p>
+  <h1>Brits Abroad 2026</h1>
+  <p>Your all-in-one relocation planning tool</p>
 </header>
 
-<div id="progressWrap">
-<div id="progressText"></div>
-<div id="bar"><div id="fill"></div></div>
+<div id="progress-container">
+  <div id="progress-text">Phase 1 of 11</div>
+  <div id="progress-bar">
+    <div id="progress-fill"></div>
+  </div>
 </div>
 
 <div id="app"></div>
 
-<footer>© 2026 Brits Abroad</footer>
-
 <script>
-const app=document.getElementById("app");
-const fill=document.getElementById("fill");
-const progressText=document.getElementById("progressText");
+const app = document.getElementById("app");
 
-let step=0;
-let data={};
+let phaseIndex = 0;
+let data = {};
 
-const steps=[
-{title:"Phase 1 – Destination Country",id:"country",type:"select",options:[
-"Portugal","Spain","France","Italy","Greece","Cyprus","Malta","Ireland",
-"Germany","Netherlands","Poland","Hungary","Bulgaria","Croatia","Latvia",
-"Estonia","Lithuania","UAE","Thailand","Malaysia","Indonesia","Mexico",
-"Panama","Costa Rica","Colombia","Uruguay","Chile","Australia","New Zealand","Canada"
-]},
-{title:"Phase 2 – Age",id:"age",type:"range",min:18,max:85,step:1},
-{title:"Phase 3 – Monthly Income (£)",id:"income",type:"range",min:0,max:20000,step:500},
-{title:"Phase 4 – Healthcare Preference",id:"health",type:"select",options:[
-"Public","Private","Mixed","Private Insurance Only"
-]},
-{title:"Phase 5 – Housing Plan",id:"housing",type:"select",options:[
-"Rent","Buy","Undecided"
-]},
-{title:"Phase 6 – Banking Setup",id:"banking",type:"select",options:[
-"UK bank only","Local bank","Digital banks (Wise/Revolut)","UK + Offshore"
-]},
-{title:"Phase 7 – Transport",id:"transport",type:"select",options:[
-"No car","Buy locally","Import UK vehicle"
-]},
-{title:"Phase 8 – Residency / Visa Route",id:"visaRoute",type:"select",options:[
-"Retirement / Passive Income","Remote Worker","Employment","Investment"
-]},
-{title:"Phase 9 – Lifestyle Preference",id:"lifestyle",type:"select",options:[
-"Quiet / Rural","City","Coastal / Island"
-]},
-{title:"Phase 10 – Days Per Year in Country",id:"days",type:"range",min:0,max:365,step:1},
-{title:"Phase 11 – Final Summary",type:"final"}
+const phases = [
+  { id:"country", title:"Choose Your Country", type:"select", options:[
+    "Portugal","Spain","France","Italy","Greece","Cyprus","Malta","Ireland",
+    "Australia","New Zealand","Canada","Thailand","Malaysia","UAE","Mexico",
+    "Panama","Costa Rica","Colombia","Ecuador","Uruguay","Chile","Poland",
+    "Hungary","Slovenia","Slovakia","Bulgaria","Latvia","Indonesia","Mauritius"
+  ]},
+  { id:"age", title:"Your Age", type:"range", min:18, max:85 },
+  { id:"income", title:"Monthly Income (£)", type:"range", min:0, max:20000, step:500 },
+  { id:"family", title:"Family Situation", type:"select", options:[
+    "Single","Couple","Family with children","Extended family"
+  ]},
+  { id:"healthcare", title:"Healthcare Preference", type:"select", options:[
+    "Private","Public","Mixed"
+  ]},
+  { id:"housing", title:"Housing Plan", type:"select", options:[
+    "Rent","Buy","Undecided"
+  ]},
+  { id:"banking", title:"Banking Setup", type:"select", options:[
+    "UK only","Local bank","Digital banks","UK + Offshore"
+  ]},
+  { id:"transport", title:"Transport Plan", type:"select", options:[
+    "No car","Buy locally","Import UK vehicle"
+  ]},
+  { id:"visa", title:"Residency Route", type:"select", options:[
+    "Retirement / Passive income","Work / Self-employed","Investment"
+  ]},
+  { id:"lifestyle", title:"Lifestyle Preference", type:"select", options:[
+    "City","Coastal","Rural"
+  ]},
+  { id:"risk", title:"Risk Tolerance", type:"select", options:[
+    "Low","Medium","High"
+  ]}
 ];
 
-const rules={
-Portugal:{visa:"D7 / Digital Nomad",tax:"Worldwide",crypto:"Taxable",note:"Non-Habitual Resident ended"},
-Spain:{visa:"Non-Lucrative / DN",tax:"Worldwide",crypto:"Taxable"},
-France:{visa:"Long-Stay",tax:"Worldwide",crypto:"Taxable"},
-Italy:{visa:"Elective Residency",tax:"Optional flat tax",crypto:"Taxable"},
-Greece:{visa:"Financially Independent",tax:"7% retiree regime",crypto:"Taxable"},
-Cyprus:{visa:"Pink Slip",tax:"Non-dom",crypto:"Tax-free"},
-Malta:{visa:"GRP",tax:"Remittance basis",crypto:"Case-by-case"},
-Ireland:{visa:"Stamp 0",tax:"Worldwide",crypto:"Taxable"},
-UAE:{visa:"Remote / Golden",tax:"0%",crypto:"Tax-free"},
-Thailand:{visa:"LTR",tax:"Territorial",crypto:"Grey area"}
-};
+function renderPhase() {
+  if (phaseIndex >= phases.length) {
+    renderSummary();
+    return;
+  }
 
-function render(){
-app.innerHTML="";
-updateProgress();
+  const p = phases[phaseIndex];
+  let html = `<div class="card"><h2>${p.title}</h2>`;
 
-if(steps[step].type==="final"){
-return showFinal();
+  if (p.type === "select") {
+    html += `<select id="input">
+      <option value="">-- Select --</option>`;
+    p.options.forEach(o => html += `<option value="${o}">${o}</option>`);
+    html += `</select>`;
+  }
+
+  if (p.type === "range") {
+    const step = p.step || 1;
+    const start = p.min;
+    html += `
+      <input type="range" id="input" min="${p.min}" max="${p.max}" step="${step}" value="${start}">
+      <div class="range-value" id="rangeValue">${start}</div>
+    `;
+  }
+
+  html += `<button onclick="savePhase()">Continue</button></div>`;
+  app.innerHTML = html;
+
+  if (p.type === "range") {
+    const input = document.getElementById("input");
+    const rv = document.getElementById("rangeValue");
+    rv.textContent = input.value;
+    input.oninput = () => rv.textContent = input.value;
+  }
+
+  updateProgress();
 }
 
-const s=steps[step];
-let html=`<div class="card"><h2 class="center">${s.title}</h2>`;
-
-if(s.type==="select"){
-html+=`<select id="input"><option value="">Select</option>`;
-s.options.forEach(o=>html+=`<option>${o}</option>`);
-html+=`</select>`;
+function savePhase() {
+  const input = document.getElementById("input");
+  if (!input.value) {
+    alert("Please make a selection");
+    return;
+  }
+  data[phases[phaseIndex].id] = input.value;
+  phaseIndex++;
+  renderPhase();
 }
 
-if(s.type==="range"){
-html+=`
-<div class="center value" id="val">${s.min}</div>
-<input type="range" id="input" min="${s.min}" max="${s.max}" step="${s.step}"
-value="${s.min}"
-oninput="document.getElementById('val').innerText=this.value">
-`;
+function updateProgress() {
+  const percent = ((phaseIndex) / phases.length) * 100;
+  document.getElementById("progress-fill").style.width = percent + "%";
+  document.getElementById("progress-text").textContent =
+    `Phase ${Math.min(phaseIndex+1, phases.length)} of 11`;
 }
 
-html+=`<div class="center"><button onclick="next()">Continue</button></div></div>`;
-app.innerHTML=html;
+function renderSummary() {
+  document.getElementById("progress-fill").style.width = "100%";
+  document.getElementById("progress-text").textContent = "Complete";
+
+  app.innerHTML = `
+    <div class="card">
+      <h2>Your Relocation Summary</h2>
+      <div class="summary">
+        <p><strong>Country:</strong> ${data.country}</p>
+        <p><strong>Age:</strong> ${data.age}</p>
+        <p><strong>Income:</strong> £${Number(data.income).toLocaleString()}</p>
+        <p><strong>Family:</strong> ${data.family}</p>
+        <p><strong>Healthcare:</strong> ${data.healthcare}</p>
+        <p><strong>Housing:</strong> ${data.housing}</p>
+        <p><strong>Banking:</strong> ${data.banking}</p>
+        <p><strong>Transport:</strong> ${data.transport}</p>
+        <p><strong>Visa Route:</strong> ${data.visa}</p>
+        <p><strong>Lifestyle:</strong> ${data.lifestyle}</p>
+        <p><strong>Risk Profile:</strong> ${data.risk}</p>
+      </div>
+      <p style="margin-top:1.5rem;">
+        Next step: country-specific visa, tax and residency guidance.
+      </p>
+    </div>
+  `;
 }
 
-function next(){
-const v=document.getElementById("input")?.value;
-if(v===""||v===undefined)return alert("Please complete this phase");
-data[steps[step].id]=v;
-step++;
-render();
-}
-
-function updateProgress(){
-progressText.innerText=`Phase ${step+1} of ${steps.length}`;
-fill.style.width=((step)/(steps.length-1)*100)+"%";
-}
-
-function showFinal(){
-const r=rules[data.country]||{};
-const resident=data.days>=183;
-
-app.innerHTML=`
-<div class="card">
-<h2 class="center">Your Relocation Summary</h2>
-
-<div class="section">
-<strong>Country:</strong> ${data.country}<br>
-<strong>Visa Route:</strong> ${data.visaRoute}<br>
-<strong>Official Visa:</strong> ${r.visa||"Varies by case"}
-</div>
-
-<div class="section">
-<strong>Tax Status:</strong>
-${resident?'<span class="warn">Tax Resident</span>':'<span class="good">Non-Resident</span>'}<br>
-System: ${r.tax||"—"}<br>
-Crypto: ${r.crypto||"—"}
-</div>
-
-<div class="section">
-<strong>Lifestyle:</strong> ${data.lifestyle}<br>
-Healthcare: ${data.health}<br>
-Housing: ${data.housing}<br>
-Banking: ${data.banking}<br>
-Transport: ${data.transport}
-</div>
-
-<div class="section">
-<strong>Profile:</strong><br>
-Age ${data.age} · Income £${data.income}/month · ${data.days} days/year
-</div>
-
-<div class="center">
-<button>Unlock Premium Country Pack (£9.97)</button>
-</div>
-</div>
-`;
-
-fill.style.width="100%";
-}
-
-render();
+renderPhase();
 </script>
 
 </body>
