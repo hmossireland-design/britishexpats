@@ -1,176 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BRITS ABROAD 2026 – Relocation Planner</title>
-<style>
-/* Basic styling */
-* {margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body {background:#fffbe6;color:#333;line-height:1.6;}
-header {text-align:center;padding:2rem;background:#ff8c00;color:white;}
-header h1 {font-size:2.8rem;margin-bottom:0.5rem;}
-header p {font-size:1.2rem;}
-#progress-wrapper {max-width:900px;margin:2rem auto;}
-#progress-text {font-weight:bold;margin-bottom:0.5rem;text-align:center;color:#ff8c00;}
-#progress-bar {height:25px;background:#fff;border-radius:25px;overflow:hidden;box-shadow:inset 0 2px 10px rgba(0,0,0,0.1);}
-#progress-fill {height:100%;background:linear-gradient(to right,#ff8c00,#ffd700);width:0%;transition:0.5s;}
-#app {max-width:900px;margin:2rem auto;padding:1rem;}
-.phase-card {background:rgba(255,255,255,0.95);padding:2rem;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,0.15);margin-bottom:2rem;}
-.phase-card h2 {color:#ff8c00;margin-bottom:1rem;}
-.phase-card select,.phase-card input[type="range"] {width:100%;padding:0.8rem;font-size:1.1rem;margin-top:0.5rem;border-radius:12px;border:2px solid #ff8c00;}
-.slider-value {margin-top:0.5rem;font-weight:bold;color:#ff8c00;}
-button {margin-top:1rem;padding:1rem 2rem;border:none;border-radius:50px;background:#ff8c00;color:white;font-size:1.2rem;cursor:pointer;}
-button:hover {background:#ff6b00;}
-.summary-box {background:#fffbe6;padding:1.5rem;border-radius:15px;margin-top:1rem;border-left:6px solid #ffd700;}
-table {width:100%;border-collapse:collapse;margin-top:1rem;}
-th,td {padding:0.5rem;text-align:left;border-bottom:1px solid #ddd;}
-th {background:#ff8c00;color:white;}
-a {color:#ff6b00;text-decoration:none;}
-a:hover {text-decoration:underline;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRITS ABROAD 2026 – Your Sunshine Relocation Adventure</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+    body {background:#fffbe6;color:#333;line-height:1.6;background:url('https://img.freepik.com/premium-photo/sunny-tropical-beach-with-palm-trees-turquoise-water-island-vacation-summer-day-paradise-island_663265-3994.jpg') center/cover fixed;}
+    .hero {position:relative;height:100vh;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;color:white;text-align:center;display:flex;align-items:center;justify-content:center;}
+    .hero::before {content:'';position:absolute;inset:0;background:rgba(0,0,0,0.4);}
+    .hero-content {position:relative;z-index:1;padding:2rem;max-width:800px;}
+    h1 {font-size:3.5rem;margin-bottom:1rem;text-shadow:2px 2px 4px rgba(0,0,0,0.6);}
+    .hero p {font-size:1.8rem;margin-bottom:2rem;text-shadow:1px 1px 2px black;}
+    button {background:#ff8c00;color:white;padding:1.2rem 2.5rem;border:none;border-radius:50px;font-size:1.4rem;cursor:pointer;transition:0.3s;box-shadow:0 4px 15px rgba(255,140,0,0.4);}
+    button:hover {background:#ff6b00;transform:scale(1.05);}
+    button.startover {position:fixed;bottom:20px;right:20px;background:#d32f2f;z-index:10;}
+    button.buy {background:#ffd700;color:#c8102e;font-size:2.2rem;padding:1.8rem;width:90%;max-width:500px;margin:3rem auto;display:block;box-shadow:0 10px 30px rgba(255,215,0,0.5);}
+    #progress-wrapper {max-width:900px;margin:3rem auto;padding:0 1rem;}
+    #progress-text {font-weight:bold;margin-bottom:0.8rem;text-align:center;font-size:1.4rem;color:#ff8c00;}
+    #progress-bar {height:25px;background:#fff;border-radius:25px;overflow:hidden;box-shadow:inset 0 2px 10px rgba(0,0,0,0.1);}
+    #progress-fill {height:100%;background:linear-gradient(to right, #ff8c00, #ffd700);width:0%;transition:width 0.6s;}
+    #app {max-width:900px;margin:0 auto;padding:1rem;}
+    .phase-card {background:rgba(255,255,255,0.9);padding:3rem;border-radius:30px;box-shadow:0 15px 40px rgba(0,0,0,0.15);margin-bottom:3rem;text-align:center;}
+    .phase-card h2 {font-size:2.4rem;margin-bottom:1.5rem;color:#ff8c00;}
+    .phase-card label {display:block;margin:2rem 0 1rem;font-weight:bold;font-size:1.4rem;color:#333;}
+    .phase-card select,.phase-card input[type="range"] {width:100%;padding:1rem;border-radius:20px;border:2px solid #ff8c00;font-size:1.2rem;background:white;}
+    .slider-value {font-size:2rem;font-weight:bold;color:#ff8c00;margin:1.5rem 0;}
+    .phase-result {background:#fffbe6;padding:1.5rem;border-left:8px solid #ffd700;margin-top:1.5rem;border-radius:20px;display:none;font-size:1.2rem;}
+    .result {font-size:2.8rem;background:linear-gradient(to right, #ff8c00, #ffd700);color:white;padding:2.5rem;border-radius:30px;text-align:center;margin:3rem 0;box-shadow:0 15px 40px rgba(255,140,0,0.4);}
+    .section {background:rgba(232,245,233,0.9);padding:2rem;border-radius:20px;margin:2rem 0;text-align:left;border-left:6px solid #ffd700;}
+    table {width:100%;border-collapse:collapse;margin:1rem 0;}
+    th, td {padding:1rem;text-align:left;border-bottom:1px solid #ddd;}
+    th {background:#ff8c00;color:white;}
+    .checklist {list-style:none;}
+    .checklist li {margin:0.8rem 0;padding-left:2.5rem;position:relative;}
+    .checklist input[type="checkbox"] {position:absolute;left:0;top:0.2rem;width:1.8rem;height:1.8rem;}
+    .checklist label {cursor:pointer;}
+    .completed {text-decoration:line-through;color:#666;}
+    @media (max-width:600px) {h1{font-size:2.8rem;}.hero p{font-size:1.4rem;}}
+  </style>
 </head>
 <body>
+  <div class="hero">
+    <div class="hero-content">
+      <h1>BRITS ABROAD 2026 🌴☀️</h1>
+      <p>For retirees, remote workers, families & everyone – your dream life awaits!</p>
+      <button id="start-btn">Start Your Adventure Now!</button>
+    </div>
+  </div>
 
-<header>
-  <h1>BRITS ABROAD 2026 🌴</h1>
-  <p>Your Ultimate Relocation & Lifestyle Planner</p>
-</header>
+  <div id="progress-wrapper">
+    <div id="progress-text">Ready for paradise?</div>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+  </div>
 
-<div id="progress-wrapper">
-  <div id="progress-text">Phase 0 of 11</div>
-  <div id="progress-bar"><div id="progress-fill"></div></div>
-</div>
+  <div id="app"></div>
 
-<div id="app"></div>
+  <button class="startover" id="startover-btn">Start Over</button>
 
-<script>
-// App logic
-const app = document.getElementById("app");
-let currentPhase = 0;
-let userData = {};
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const app = document.getElementById("app");
+    let currentPhase = 0;
+    let userData = {};
 
-// Countries list with flags
-const countries = [
-  {name:"Portugal",flag:"🇵🇹"},{name:"Spain",flag:"🇪🇸"},{name:"Ireland",flag:"🇮🇪"},
-  {name:"Australia",flag:"🇦🇺"},{name:"Cyprus",flag:"🇨🇾"},{name:"Malta",flag:"🇲🇹"},
-  {name:"France",flag:"🇫🇷"},{name:"UAE",flag:"🇦🇪"},{name:"Thailand",flag:"🇹🇭"},
-  {name:"Italy",flag:"🇮🇹"},{name:"Greece",flag:"🇬🇷"},{name:"Canada",flag:"🇨🇦"},
-  {name:"New Zealand",flag:"🇳🇿"},{name:"Malaysia",flag:"🇲🇾"},{name:"Panama",flag:"🇵🇦"},
-  {name:"Mexico",flag:"🇲🇽"},{name:"Costa Rica",flag:"🇨🇷"},{name:"Hungary",flag:"🇭🇺"},
-  {name:"Poland",flag:"🇵🇱"},{name:"Slovenia",flag:"🇸🇮"},{name:"Slovakia",flag:"🇸🇰"},
-  {name:"Bulgaria",flag:"🇧🇬"},{name:"Indonesia",flag:"🇮🇩"},{name:"Colombia",flag:"🇨🇴"},
-  {name:"Mauritius",flag:"🇲🇺"},{name:"Belize",flag:"🇧🇿"},{name:"Ecuador",flag:"🇪🇨"},
-  {name:"Uruguay",flag:"🇺🇾"},{name:"Chile",flag:"🇨🇱"},{name:"Latvia",flag:"🇱🇻"}
-];
+    const phases = [
+      {title: "🌍 Dream Destination", id: "destination", type: "select", options: ["Portugal","Spain","Ireland","Australia","Cyprus","Malta","France","UAE","Thailand","Italy","Greece","Canada","New Zealand","Malaysia","Panama","Mexico","Costa Rica","Hungary","Poland","Slovenia","Slovakia","Bulgaria","Indonesia","Colombia","Mauritius","Belize","Ecuador","Uruguay","Chile","Latvia"]},
+      {title: "💼 Your Situation", id: "situation", type: "select", options: ["Retired with pension","Remote/digital nomad","Working abroad","Family move","Just exploring","No income yet","Business/Company Owner/Director","Offshore Company Owner"]},
+      {title: "💰 Monthly Income (£)", id: "income", type: "range", min:0, max:20000, step:500},
+      {title: "👴 Your Age", id: "age", type: "range", min:18, max:85, step:1},
+      {title: "👨‍👩‍👧 Family Joining?", id: "family", type: "select", options: ["No","Spouse only","Spouse + children","Extended family"]},
+      {title: "🏥 Healthcare Needs", id: "health", type: "select", options: ["Good health","Pre-existing conditions","Family coverage needed","Private Insurance Preferred","Public System Only"]},
+      {title: "💼 Work Plans", id: "work", type: "select", options: ["Fully retired","Remote/digital nomad","Local job","No work","Business/Company Owner/Director"]},
+      {title: "📅 Move Timeline", id: "timeline", type: "select", options: ["Within 6 months","6-12 months","1-2 years","Just exploring"]},
+      {title: "🎯 Lifestyle Priorities", id: "priority", type: "select", options: ["Low cost","Warm climate","English-speaking","Tax advantages","Nature","City life","Ease of Doing Business","Low Corruption Index","Working Rights for UK Passport Holders"]},
+      {title: "Final Report & Premium Unlock", type: "final"}
+    ];
 
-// Country visa, tax, costs
-const countryRules = {
-  "Portugal": {visa:"Residence Permit / D7",tax:"Flat 20% NHR, otherwise progressive",cost:1800,breakdown:{rent:700,food:250,transport:80,utilities:50},url:"https://www.portugal.gov.pt/en/guides"},
-  "Spain": {visa:"Residence Visa / Non-Lucrative",tax:"Progressive 19–45%",cost:1900,breakdown:{rent:800,food:300,transport:90,utilities:60},url:"https://www.exteriores.gob.es/en"},
-  "Ireland": {visa:"Work / Stamp 0-4",tax:"Progressive 20–40%",cost:2800,breakdown:{rent:1200,food:400,transport:200,utilities:150},url:"https://www.irishimmigration.ie/"},
-  "Australia": {visa:"Subclass 188/189/190",tax:"Progressive 19–45%",cost:2800,breakdown:{rent:1200,food:400,transport:200,utilities:150},url:"https://immi.homeaffairs.gov.au/"},
-  "Cyprus": {visa:"Temporary Residency / Permanent",tax:"Progressive 20–35%",cost:2000,breakdown:{rent:800,food:300,transport:100,utilities:80},url:"https://www.moi.gov.cy/"},
-  "Malta": {visa:"Maltese Residence Permit",tax:"Flat 15% remittance",cost:2200,breakdown:{rent:900,food:350,transport:120,utilities:90},url:"https://www.identitymalta.com/"},
-  "France": {visa:"Long-stay visa",tax:"Progressive 14–45%",cost:2100,breakdown:{rent:900,food:350,transport:120,utilities:80},url:"https://france-visas.gouv.fr/"},
-  "UAE": {visa:"Residence / Work",tax:"0% personal income tax",cost:2500,breakdown:{rent:1200,food:500,transport:300,utilities:100},url:"https://u.ae/en/information-and-services/visa-and-emirates-id"},
-  "Thailand": {visa:"O-A / Business",tax:"0–35%",cost:1200,breakdown:{rent:400,food:300,transport:150,utilities:50},url:"https://www.thaiembassy.com/"},
-  "Italy": {visa:"Elective Residency",tax:"Progressive 23–43%",cost:2000,breakdown:{rent:800,food:300,transport:80,utilities:70},url:"https://vistoperitalia.esteri.it/home/en"},
-  "Greece": {visa:"Financial / Retirement",tax:"15–45%",cost:1600,breakdown:{rent:600,food:250,transport:80,utilities:50},url:"https://www.mfa.gr/en/"},
-  "Canada": {visa:"Work / PR",tax:"15–33% federal + provincial",cost:2200,breakdown:{rent:900,food:350,transport:200,utilities:90},url:"https://www.canada.ca/en/immigration-refugees-citizenship.html"},
-  "New Zealand": {visa:"Work / Investor",tax:"10–33%",cost:2500,breakdown:{rent:1200,food:400,transport:200,utilities:100},url:"https://www.immigration.govt.nz/"},
-  "Malaysia": {visa:"MM2H",tax:"0–24%",cost:1000,breakdown:{rent:400,food:250,transport:150,utilities:50},url:"https://www.mm2h.gov.my/"},
-  "Panama": {visa:"Pensionado / Friendly Nations",tax:"0–25%",cost:1500,breakdown:{rent:600,food:350,transport:200,utilities:50},url:"https://www.migracion.gob.pa/"},
-  "Mexico": {visa:"Temporary Resident",tax:"1.92–35%",cost:1200,breakdown:{rent:400,food:300,transport:150,utilities:50},url:"https://www.gob.mx/inm"},
-  "Costa Rica": {visa:"Pensionado / Rentista",tax:"0–25%",cost:1500,breakdown:{rent:600,food:300,transport:200,utilities:50},url:"https://www.rree.go.cr/"},
-  "Hungary": {visa:"Residence / Work",tax:"15% flat",cost:1300,breakdown:{rent:500,food:300,transport:300,utilities:50},url:"https://www.bmbah.hu/"},
-  "Poland": {visa:"Temporary / Work",tax:"17–32%",cost:1400,breakdown:{rent:600,food:300,transport:350,utilities:50},url:"https://www.gov.pl/web/diplomacy"},
-  "Slovenia": {visa:"Residence / Work",tax:"16–50%",cost:1600,breakdown:{rent:700,food:300,transport:400,utilities:50},url:"https://www.gov.si/en/"},
-  "Slovakia": {visa:"Residence / Work",tax:"19–25%",cost:1400,breakdown:{rent:600,food:300,transport:350,utilities:50},url:"https://www.mzv.sk/en"},
-  "Bulgaria": {visa:"Permanent / Work",tax:"10% flat",cost:1000,breakdown:{rent:400,food:250,transport:200,utilities:50},url:"https://www.mfa.bg/en/"},
-  "Indonesia": {visa:"KITAS / Retirement",tax:"5–30%",cost:900,breakdown:{rent:300,food:250,transport:200,utilities:50},url:"https://www.kemlu.go.id/"},
-  "Colombia": {visa:"Migrant / Resident",tax:"0–35%",cost:900,breakdown:{rent:300,food:250,transport:200,utilities:50},url:"https://www.cancilleria.gov.co/"},
-  "Mauritius": {visa:"Occupation Permit",tax:"15% flat",cost:1400,breakdown:{rent:600,food:300,transport:350,utilities:50},url:"https://www.govmu.org/"},
-  "Belize": {visa:"Temporary / Permanent",tax:"25%",cost:1500,breakdown:{rent:600,food:350,transport:400,utilities:50},url:"https://www.mfa.gov.bz/"},
-  "Ecuador": {visa:"Pension / Investor",tax:"0–35%",cost:1000,breakdown:{rent:400,food:300,transport:200,utilities:50},url:"https://www.cancilleria.gob.ec/"},
-  "Uruguay": {visa:"Temporary / Resident",tax:"10–25%",cost:1800,breakdown:{rent:700,food:350,transport:500,utilities:50},url:"https://www.gub.uy/"},
-  "Chile": {visa:"Temporary / Resident",tax:"0–40%",cost:1300,breakdown:{rent:500,food:300,transport:400,utilities:50},url:"https://chile.gob.cl/"},
-  "Latvia": {visa:"Residence / Work",tax:"20%",cost:1400,breakdown:{rent:600,food:300,transport:400,utilities:50},url:"https://www.pmlp.gov.lv/en"}
-};
+    const costData = {
+      "Portugal": {monthly: 1800},
+      "Spain": {monthly: 1900},
+      "Ireland": {monthly: 2800},
+      "Australia": {monthly: 2800},
+      "Cyprus": {monthly: 2000},
+      "Malta": {monthly: 2200},
+      "France": {monthly: 2100},
+      "UAE": {monthly: 2500},
+      "Thailand": {monthly: 1200},
+      "Italy": {monthly: 2000},
+      "Greece": {monthly: 1600},
+      "Canada": {monthly: 2200},
+      "New Zealand": {monthly: 2500},
+      "Malaysia": {monthly: 1000},
+      "Panama": {monthly: 1500},
+      "Mexico": {monthly: 1200},
+      "Costa Rica": {monthly: 1500},
+      "Hungary": {monthly: 1300},
+      "Poland": {monthly: 1400},
+      "Slovenia": {monthly: 1600},
+      "Slovakia": {monthly: 1400},
+      "Bulgaria": {monthly: 1000},
+      "Indonesia": {monthly: 900},
+      "Colombia": {monthly: 900},
+      "Mauritius": {monthly: 1400},
+      "Belize": {monthly: 1500},
+      "Ecuador": {monthly: 1000},
+      "Uruguay": {monthly: 1800},
+      "Chile": {monthly: 1300},
+      "Latvia": {monthly: 1400}
+    };
 
-// Phases
-const phases = [
-  {title:"Phase 1: Choose Destination",id:"destination",type:"select",options:countries},
-  {title:"Phase 2: Age",id:"age",type:"range",min:18,max:85,step:1},
-  {title:"Phase 3: Monthly Income (£)",id:"income",type:"range",min:0,max:20000,step:500},
-  {title:"Phase 4: Family",id:"family",type:"select",options:["No","Spouse only","Spouse + children","Extended family"]},
-  {title:"Phase 5: Healthcare",id:"health",type:"select",options:["Good health","Pre-existing","Family coverage","Private insurance","Public only"]},
-  {title:"Phase 6: Work Plans",id:"work",type:"select",options:["Retired","Remote","Local job","No work","Business owner"]},
-  {title:"Phase 7: Timeline",id:"timeline",type:"select",options:["Within 6 months","6-12 months","1-2 years","Exploring"]},
-  {title:"Phase 8: Lifestyle",id:"lifestyle",type:"select",options:["Low cost","Warm climate","English-speaking","Tax advantages","Nature","City life","Ease of Doing Business","Low Corruption Index","Working rights"]},
-  {title:"Phase 9: Transport",id:"transport",type:"select",options:["No car","Buy locally","Import UK vehicle"]},
-  {title:"Phase 10: Banking",id:"banking",type:"select",options:["UK only","Local account","Digital banks","UK + Offshore"]},
-  {title:"Phase 11: Summary",id:"summary",type:"final"}
-];
+    const taxData = {
+      "Portugal": "Income Tax: Progressive 14.5-48% (NHR 2.0: flat 20% foreign income). Capital Gains: 28%. Property CGT: 50% inclusion. Annual Property Tax: 0.3-0.8%. Buying: IMT 6-8%. Crypto: 28%. Pensions often favourable.",
+      "Spain": "Income Tax: 19-47%. Capital Gains: 19-28%. Property: Added to income. Annual Property Tax: IBI 0.4-1.1%. Buying: Transfer 6-11%. Crypto: 19-28%.",
+      "Ireland": "Income Tax: 20-40%. Capital Gains: 33%. Annual Property Tax: LPT 0.18-0.25%. Buying: Stamp 1-2%. Crypto: CGT.",
+      "Australia": "Income Tax: 0-45%. Capital Gains: 50% discount >1 year. Annual Property Tax: Council rates. Buying: Stamp high. Crypto: CGT.",
+      "Cyprus": "Income Tax: 0-35% (first €19,500 exempt). Non-dom: Exempt dividends/interest. Capital Gains: 20% property only. Annual Property Tax: Low. Buying: Transfer 3-8%. Crypto: Passive untaxed. Excellent for investors/crypto.",
+      "Malta": "Income Tax: 0-35%. Capital Gains: Property 5-12%. Annual Property Tax: None central. Buying: Stamp 5%. Crypto: Long-term untaxed.",
+      "France": "Income Tax: 0-45%. Capital Gains: 30% flat. Annual Property Tax: ~0.5-1%. Buying: Notary 7-8%. Crypto: 30%.",
+      "UAE": "Income Tax: 0%. Capital Gains: 0%. Property Tax: Low/none. Buying: Registration 4%. Crypto: 0%. Tax haven.",
+      "Thailand": "Income Tax: 0-35%. Capital Gains: Often exempt. Annual Property Tax: Low. Crypto: Exempt certain platforms.",
+      "Italy": "Income Tax: 23-43%. Capital Gains: 26%. Annual Property Tax: IMU 0.4-1.1%. Buying: Registration 2-9%. Crypto: 26%. Flat 7% south.",
+      "Greece": "Income Tax: 9-44%. Capital Gains: 15%. Annual Property Tax: ENFIA 0.1-0.5%. Buying: Transfer 3%. Crypto: 15%.",
+      "Canada": "Income Tax: 15-53%. Capital Gains: 50% inclusion. Annual Property Tax: 0.5-1%. Crypto: CGT.",
+      "New Zealand": "Income Tax: 10.5-39%. No general CGT (property bright-line). Crypto: Taxed if trading.",
+      "Malaysia": "Income Tax: 0-30%. Capital Gains: 0% general. Annual Property Tax: Low. Crypto: Casual untaxed.",
+      "Panama": "Territorial tax – foreign income exempt. Local income 0-25%. Capital Gains: 10%.",
+      "Mexico": "Income Tax: 1.92-35%. Capital Gains: Up to 35%. Annual Property Tax: Low.",
+      "Costa Rica": "Territorial – foreign exempt. Local progressive.",
+      "Hungary": "Flat 15% income. Capital Gains: 15%.",
+      "Poland": "12-32% income. Capital Gains: 19%.",
+      "Slovenia": "16-50% income. Capital Gains: Decreasing.",
+      "Slovakia": "19-25% income. Capital Gains: Exempt after time.",
+      "Bulgaria": "Flat 10% income. Capital Gains: 10%.",
+      "Indonesia": "5-35% income. Capital Gains: Varies.",
+      "Colombia": "Progressive income. Capital Gains: 10-15%.",
+      "Mauritius": "15% income. No general CGT.",
+      "Belize": "Territorial – foreign exempt.",
+      "Ecuador": "Progressive income. Capital Gains: Varies.",
+      "Uruguay": "0-36% income. Foreign low.",
+      "Chile": "Progressive income. Capital Gains: Varies.",
+      "Latvia": "20-31% income. Capital Gains: 20-25.5%."
+    };
 
-// Render phase
-function renderPhase(){
-  app.innerHTML="";
-  if(currentPhase>=phases.length-1){showSummary();return;}
-  const phase=phases[currentPhase];
-  let html=`<div class="phase-card"><h2>${phase.title}</h2>`;
-  if(phase.type==="select"){
-    html+=`<select id="${phase.id}"><option value="">-- Choose --</option>`;
-    phase.options.forEach(o=>{
-      if(o.flag) html+=`<option value="${o.name}">${o.flag} ${o.name}</option>`;
-      else html+=`<option value="${o}">${o}</option>`;
-    });
-    html+=`</select>`;
-  }else if(phase.type==="range"){
-    html+=`<input type="range" id="${phase.id}" min="${phase.min}" max="${phase.max}" step="${phase.step}" value="${phase.min}" oninput="document.getElementById('${phase.id}-val').innerText=this.value">
-           <div class="slider-value" id="${phase.id}-val">${phase.min}</div>`;
-  }
-  html+=`<button onclick="savePhase()">Continue</button></div>`;
-  app.innerHTML=html;
-  updateProgress();
-}
+    const lawsData = {
+      "Portugal": "Drink driving: 0.05%. Speed limits: urban 50km/h, motorways 120km/h. Fines: parking €60-300, smoking bans in public.",
+      "Spain": "Drink driving: 0.05%. Speed limits: urban 30-50km/h, motorways 120km/h. High fines.",
+      "Cyprus": "Drink driving: 0.05%. Speed limits: urban 50km/h, motorways 100km/h.",
+      "UAE": "Drink driving: 0.0% (zero tolerance). Severe penalties including jail.",
+      "Thailand": "Drink driving: 0.05%. Speed limits: urban 80km/h, motorways 120km/h.",
+      "Malaysia": "Drink driving: 0.08%. Speed limits: urban 90km/h.",
+      "Panama": "Drink driving: 0.05%. Speed limits: urban 50km/h."
+    };
 
-// Save phase
-function savePhase(){
-  const phase=phases[currentPhase];
-  const input=document.getElementById(phase.id);
-  let val=input.value;
-  if(phase.type==="range") val=Number(val);
-  if(val===""||val===null) return alert("Please complete this step");
-  userData[phase.id]=val;
-  currentPhase++;
-  renderPhase();
-}
+    const visaData = {
+      "Portugal": "D7 Visa: €870/mo min income, no age limit, PR after 5 years.",
+      "Spain": "Non-Lucrative: €2,400/mo, no age, PR 5 years.",
+      "Cyprus": "Category F: Income/property proof, PR 5 years.",
+      "UAE": "Retirement Visa: 55+, $3,500/mo or property.",
+      "Thailand": "LTR/Elite: Income/deposit, 50+ for some.",
+      "Malaysia": "MM2H: Deposit/income, no age.",
+      "Panama": "Pensionado: $1,000/mo pension, immediate PR."
+    };
 
-// Update progress
-function updateProgress(){
-  document.getElementById("progress-text").innerText=`Phase ${currentPhase+1} of ${phases.length}`;
-  document.getElementById("progress-fill").style.width=`${((currentPhase+1)/phases.length*100)}%`;
-}
+    const checklistItems = [
+      "Passport valid 6+ months",
+      "Visa/Residency application",
+      "Birth/Marriage certificates",
+      "Driving licence/international permit",
+      "GHIC/EHIC card",
+      "Open international bank account (Wise/Revolut)",
+      "Notify UK bank of move",
+      "Set up local bank account",
+      "Transfer pension/income",
+      "Tax residency certificate",
+      "Find rental/property",
+      "Sign lease/contract",
+      "Register address (empadronamiento/padrón)",
+      "Set up utilities (water, electric, internet)",
+      "Home insurance",
+      "Register for local healthcare (S1 form if pensioner)",
+      "Private health insurance",
+      "Find local doctor/dentist",
+      "Vaccinations/medications",
+      "Pet health certificate (if applicable)",
+      "Book international movers/flights",
+      "Ship belongings",
+      "Pet passport/microchip",
+      "Pet airline approval",
+      "Cancel UK services (council tax, TV licence)",
+      "Research international schools",
+      "Enrol children",
+      "Find childcare",
+      "Language classes",
+      "Join expat family groups"
+    ];
 
-// Show summary
-function showSummary(){
-  const dest=userData.destination||"Portugal";
-  const rules=countryRules[dest]||{visa:"N/A",tax:"N/A",cost:1800,breakdown:{rent:0,food:0,transport:0,utilities:0},url:"#"};
-  const ukBreakdown={rent:1200,food:400,transport:200,utilities:150};
-  const monthlySavings=(ukBreakdown.rent+ukBreakdown.food+ukBreakdown.transport+ukBreakdown.utilities)
-                       -(rules.breakdown.rent+rules.breakdown.food+rules.breakdown.transport+rules.breakdown.utilities);
-  const annualSavings=monthlySavings*12;
+    function startApp() {
+      currentPhase = 0;
+      userData = {};
+      renderPhase();
+    }
 
-  app.innerHTML=`<div class="phase-card"><h2>🌟 Your Relocation Summary</h2>
-  <div class="summary-box">
-    <p><strong>Destination:</strong> ${dest}</p>
-    <p><strong>Visa:</strong> <a href="${rules.url}" target="_blank">${rules.visa}</a></p>
-    <p><strong>Estimated Tax:</strong> <a href="${rules.url}" target="_blank">${rules.tax}</a></p>
-    <p><strong>Monthly Cost Breakdown:</strong></p>
-    <table>
-      <tr><th>Category</th><th>UK (£)</th><th>${dest} (£)</th><th>Savings (£)</th></tr>
-      <tr><td>Rent</td><td>${ukBreakdown.rent}</td><td>${rules.breakdown.rent}</td><td>${ukBreakdown.rent-rules.breakdown.rent}</td></tr>
-      <tr><td>Food</td><td>${ukBreakdown.food}</td><td>${rules.breakdown.food}</td><td>${ukBreakdown.food-rules.breakdown.food}</td></tr>
-      <tr><td>Transport</td><td>${ukBreakdown.transport}</td><td>${rules.breakdown.transport}</td><td>${ukBreakdown.transport-rules.breakdown.transport}</td></tr>
-      <tr><td>Utilities</td><td>${ukBreak
+    document.getElementById("start-btn").addEventListener("click", startApp);
+    document.getElementById("startover-btn").addEventListener("click", startApp);
+
+    function renderPhase() {
+      app.innerHTML = "";
+      if (currentPhase >= phases.length - 1) {
+        showFinal();
+        return;
+      }
+      const phase = phases[currentPhase];
+      let html = `<div class="phase-card"><h2>${phase.title}</h2>`;
+      if (phase.type === "select") {
+        html += `<select id="${phase.id}"><option>-- Choose --</option>`;
+        phase.options.forEach(o => html += `<option>${o}</option>`);
+        html += `</select>`;
+      } else if (phase.type === "range") {
+        const symbol = phase.id === 'income' ? '£' : '';
+        const extra = phase.id === 'age' ? ' years' : '';
+        const defaultValue = phase.min;
+        html += `<label>${phase.title}</label>
+                 <div class="slider-value">\( {symbol} \){defaultValue.toLocaleString()}${extra}</div>
+                 <input type="range" min="\( {phase.min}" max=" \){phase.max}" step="\( {phase.step || 1}" value=" \){defaultValue}" id="\( {phase.id}" oninput="updateSliderValue(this, ' \){symbol}', '${extra}')">`;
+      }
+      html += `<div class="phase-result" id="${phase.id}-result"></div><button onclick="savePhase()">Continue</button></div>`;
+      app.innerHTML = html;
+      updateProgress();
+    }
+
+    function updateSliderValue(input, symbol, extra) {
+      const valueDisplay = input.previousElementSibling;
+      valueDisplay.innerText = symbol + Number(input.value).toLocaleString() + extra;
+    }
+
+    function savePhase() {
+      const phase = phases[currentPhase];
+      const input = document.getElementById(phase.id);
+      let val = input.value;
+      if (phase.type === "range") val = Number(val);
+      if (!val && val !== 0) return alert("Please complete this step");
+      userData[phase.id] = val;
+      const result = document.getElementById(phase.id + "-result");
+      result.innerHTML = `<strong>${val}</strong>`;
+      result.style.display = "block";
+      currentPhase++;
+      renderPhase();
+    }
+
+    function updateProgress() {
+      document.getElementById("progress-text").innerText = `Phase ${currentPhase + 1} of ${phases.length}`;
+      document.getElementById("progress-fill").style.width = ((currentPhase + 1) / phases.length * 100) + "%";
+    }
+
+    function showFinal() {
+      const destination = userData.destination || "Portugal";
+      const monthlyCost = costData[destination]?.monthly || 1800;
+      const ukMonthly = 2500;
+      const monthlySavings = ukMonthly - monthlyCost;
+      const annualSavings = monthlySavings * 12;
+      let checklistHTML = '<ul class="checklist">';
+      checklistItems.forEach(item => {
+        checklistHTML += `<li><input type="checkbox" onchange="this.parentNode.classList.toggle('completed')"><label>${item}</label></li>`;
+      });
+      checklistHTML += '</ul>';
+      app.innerHTML = `
+        <div class="phase-card">
+          <h2>🎉 Your 2026 Personalised Relocation Report</h2>
+          <div class="result">Potential annual cost savings: <strong>£${annualSavings.toLocaleString()}</strong> in ${destination}!</div>
+          <div class="section">
+            <h3>Cost of Living Comparison (Monthly for Couple)</h3>
+            <table>
+              <tr><th>Category</th><th>UK</th><th>${destination}</th><th>Savings</th></tr>
+              <tr><td>Rent</td><td>£1,200</td><td>£700</td><td>£500</td></tr>
+              <tr><td>Food</td><td>£400</td><td>£250</td><td>£150</td></tr>
+              <tr><td>Transport</td><td>£200</td><td>£80</td><td>£120</td></tr>
+              <tr><td>Utilities</td><td>£150</td><td>£100</td><td>£50</td></tr>
+              <tr><td>Total</td><td>£2,500</td><td>£1,460</td><td>£1,040</td></tr>
+            </table>
+            <p>See full comparison: <a href="https://www.numbeo.com/cost-of-living/compare_countries_result.jsp?country1=United+Kingdom&country2=${encodeURIComponent(destination)}" target="_blank">Numbeo</a></p>
+          </div>
+          <div class="section">
+            <h3>In-Depth Tax Overview for ${destination}</h3>
+            <p>${taxData[destination] || "Favourable for expats – territorial or low rates."}</p>
+          </div>
+          <div class="section">
+            <h3>Local Laws & Rules</h3>
+            <p>${lawsData[destination] || "Standard rules – check official sources."}</p>
+          </div>
+          <div class="section">
+            <h3>Visa & Immigration</h3>
+            <p>${visaData[destination] || "Retirement/digital nomad visa available."}</p>
+          </div>
+          <div class="section">
+            <h3>Local Paperwork Checklist</h3>
+            <p>Register at town hall (empadronamiento/padrón), apply for residency card/NIE/TIE, get local tax number, register with social security/health system.</p>
+          </div>
+          <div class="section">
+            <h3>Banking: Local vs Online</h3>
+            <p>Online (Revolut, Wise, N26): Easy, low fees, multi-currency. Local banks: Needed for mortgages/utilities – lower transfer fees long-term.</p>
+          </div>
+          <div class="section">
+            <h3>Cars & Driving</h3>
+            <p>New/used cars often cheaper than UK. Road tax, insurance, fuel vary (check local rates). Import UK car possible but complex.</p>
+          </div>
+          <div class="section">
+            <h3>Language Learning</h3>
+            <p>Duolingo/Babbel for local language. Quick phrases: Hello, Thank you, Emergency.</p>
+          </div>
+          <div class="section">
+            <h3>Pet Relocation Guide</h3>
+            <p>Pet passport, microchip, airline rules, quarantine info.</p>
+          </div>
+          <div class="section">
+            <h3>Mental Health & Adjustment</h3>
+            <p>Tips for homesickness, expat forums, counseling resources.</p>
+          </div>
+          <div class="section">
+            <h3>Safety & Emergency Contacts</h3>
+            <p>Emergency: 112 (EU), embassy link.</p>
+          </div>
+          <div class="section">
+            <h3>Currency Converter</h3>
+            <p>Simple widget for £ to local currency (use online tools).</p>
+          </div>
+          <div class="section">
+            <h3>Expat Community Hub</h3>
+            <p>Join InterNations, Facebook expat groups, Meetup, Reddit r/IWantOut & r/expats.</p>
+            <button onclick="alert('Finding locals in ${destination}...')">Find Locals</button>
+          </div>
+          <div class="section">
+            <h3>Interactive Moving Checklist</h3>
+            ${checklistHTML}
+          </div>
+          <button class="buy">UNLOCK PREMIUM PACK – ONLY £9.97</button>
+          <p>100+ page PDF guide, full checklists, templates, lawyer contacts, 2026 updates, exclusive community, priority support.</p>
+        </div>
+      `;
+      confetti({particleCount: 200, spread: 70, origin: { y: 0.6 }});
+    }
+  </script>
+</body>
+</html>
