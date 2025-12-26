@@ -3,25 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brits Abroad 2026</title>
+<title>Brits Abroad 2026 – Master Planner</title>
 
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#fffbe6;color:#333}
 header{text-align:center;padding:2rem;background:#ff8c00;color:#fff}
-h1{margin-bottom:.5rem}
-#progress{max-width:800px;margin:1rem auto}
+h1{margin:.2rem 0}
+#progress{max-width:900px;margin:1rem auto}
 #progressText{text-align:center;font-weight:bold}
 #bar{background:#fff;border-radius:20px;overflow:hidden;height:18px}
 #fill{background:linear-gradient(to right,#ff8c00,#ffd700);height:100%;width:0%;transition:.4s}
 
-#app{max-width:800px;margin:2rem auto;padding:1rem}
-.card{background:#fff;padding:2rem;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.1);text-align:center}
-select,input[type=range]{width:100%;padding:.6rem;margin:1rem 0;border-radius:10px;border:2px solid #ff8c00}
+#app{max-width:900px;margin:2rem auto;padding:1rem}
+.card{background:#fff;padding:2rem;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.1)}
+.center{text-align:center}
+
+select,input[type=range]{width:100%;padding:.7rem;margin:1rem 0;border-radius:10px;border:2px solid #ff8c00}
 button{background:#ff8c00;color:#fff;border:none;border-radius:30px;padding:.8rem 2rem;font-size:1.1rem;cursor:pointer}
 button:hover{background:#ff6b00}
-.value{font-size:1.6rem;color:#ff8c00;margin-bottom:1rem}
-.section{background:#f9f9f9;border-left:6px solid #ffd700;padding:1rem;margin-top:1rem;text-align:left}
+.value{font-size:1.6rem;color:#ff8c00}
+
+.section{background:#f9f9f9;border-left:6px solid #ffd700;padding:1rem;margin:1rem 0}
+.badge{display:inline-block;background:#ffd700;color:#333;padding:.2rem .6rem;border-radius:6px;font-size:.9rem;margin-left:.5rem}
+.warn{color:#c62828;font-weight:bold}
+.good{color:#2e7d32;font-weight:bold}
+
 footer{text-align:center;padding:1rem;color:#666}
 </style>
 </head>
@@ -30,82 +37,82 @@ footer{text-align:center;padding:1rem;color:#666}
 
 <header>
 <h1>BRITS ABROAD 2026 🌍</h1>
-<p>Relocation, Tax & Visa Planner for UK Passport Holders</p>
+<p>Visa · Tax · Lifestyle · Crypto · Pets · Planning Tool</p>
 </header>
 
 <div id="progress">
-<div id="progressText">Ready to begin</div>
+<div id="progressText"></div>
 <div id="bar"><div id="fill"></div></div>
 </div>
 
 <div id="app"></div>
 
-<footer>© 2026 Brits Abroad</footer>
+<footer>© 2026 Brits Abroad – Planning Tool Only</footer>
 
 <script>
-const app = document.getElementById("app");
-const progressFill = document.getElementById("fill");
-const progressText = document.getElementById("progressText");
+const app=document.getElementById("app");
+const fill=document.getElementById("fill");
+const progressText=document.getElementById("progressText");
 
-let step = 0;
-let data = {};
+let step=0;
+let data={};
 
-const countries = [
+const steps=[
+{title:"Choose Destination",id:"country",type:"select",options:[
 "Portugal","Spain","France","Italy","Greece","Cyprus","Malta","Ireland",
-"Germany","Netherlands","Poland","Hungary","Bulgaria","Romania","Slovenia",
-"Croatia","Latvia","Estonia","Lithuania","UAE","Thailand","Malaysia",
-"Indonesia","Mexico","Panama","Costa Rica","Colombia","Uruguay","Chile","Australia"
-];
-
-const countryRules = {
-Portugal:{visa:"D7 / Digital Nomad",tax:"20–48% income tax, NHR regime ending"},
-Spain:{visa:"Non-Lucrative / Digital Nomad",tax:"19–47%"},
-France:{visa:"Long Stay Visitor",tax:"0–45%"},
-Italy:{visa:"Elective Residency",tax:"Flat tax €100k option"},
-Greece:{visa:"Financially Independent",tax:"7% flat for retirees"},
-Cyprus:{visa:"Pink Slip / Permanent Residency",tax:"0–35%, non-dom friendly"},
-Malta:{visa:"Global Residence Programme",tax:"Remittance basis"},
-Ireland:{visa:"Stamp 0",tax:"20–40%"},
-Germany:{visa:"Freelancer / Residence Permit",tax:"14–45%"},
-Netherlands:{visa:"Self-employed / DAFT",tax:"37–49%"},
-Poland:{visa:"Temporary Residence",tax:"12–32%"},
-Hungary:{visa:"Residence Permit",tax:"15% flat"},
-Bulgaria:{visa:"Long Stay D",tax:"10% flat"},
-Romania:{visa:"Long Stay",tax:"10% flat"},
-Slovenia:{visa:"Temporary Residence",tax:"16–50%"},
-Croatia:{visa:"Digital Nomad",tax:"20–30%"},
-Latvia:{visa:"Temporary Residence",tax:"20–31%"},
-Estonia:{visa:"Digital Nomad",tax:"20% flat"},
-Lithuania:{visa:"Temporary Residence",tax:"15–32%"},
-UAE:{visa:"Golden / Remote Work",tax:"0% income tax"},
-Thailand:{visa:"LTR / Elite",tax:"0–35%"},
-Malaysia:{visa:"MM2H",tax:"Territorial"},
-Indonesia:{visa:"Second Home",tax:"Territorial"},
-Mexico:{visa:"Temporary Resident",tax:"1–35%"},
-Panama:{visa:"Friendly Nations",tax:"Territorial"},
-CostaRica:{visa:"Rentista",tax:"Territorial"},
-Colombia:{visa:"M Visa",tax:"0–39%"},
-Uruguay:{visa:"Legal Residency",tax:"Territorial"},
-Chile:{visa:"Temporary Residence",tax:"0–40%"},
-Australia:{visa:"Skilled / Retirement",tax:"19–45%"}
-};
-
-const steps = [
-{title:"Choose Country",id:"country",type:"select",options:countries},
+"Germany","Netherlands","Poland","Hungary","Bulgaria","Croatia","Latvia",
+"Estonia","Lithuania","UAE","Thailand","Malaysia","Indonesia","Mexico",
+"Panama","Costa Rica","Colombia","Uruguay","Chile","Australia","New Zealand","Canada"
+]},
 {title:"Monthly Income (£)",id:"income",type:"range",min:0,max:20000,step:500},
 {title:"Your Age",id:"age",type:"range",min:18,max:85,step:1},
-{title:"Work Status",id:"work",type:"select",options:["Retired","Remote Worker","Employed","Business Owner"]},
-{title:"Final",type:"final"}
+{title:"Work Type",id:"work",type:"select",options:["Retired","Remote Worker","Employed Abroad","Business Owner","Passive Income"]},
+{title:"Days per year in country",id:"days",type:"range",min:0,max:365,step:1},
+{title:"Pets relocating?",id:"pets",type:"select",options:["None","Dog","Cat","Dog & Cat"]},
+{title:"Final Report",type:"final"}
 ];
+
+const rules={
+Portugal:{visa:"D7 / Digital Nomad",income:760,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+Spain:{visa:"Non-Lucrative / DN",income:2400,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+France:{visa:"Long Stay Visitor",income:1400,tax:"Worldwide",crypto:"Taxable",pets:"Moderate"},
+Italy:{visa:"Elective Residency",income:2600,tax:"Flat €100k option",crypto:"Taxable",pets:"Easy"},
+Greece:{visa:"FIP",income:2000,tax:"7% retiree regime",crypto:"Taxable",pets:"Easy"},
+Cyprus:{visa:"Pink Slip",income:2000,tax:"Non-dom",crypto:"Tax-free non-dom",pets:"Easy"},
+Malta:{visa:"GRP",income:3000,tax:"Remittance",crypto:"Case by case",pets:"Moderate"},
+Ireland:{visa:"Stamp 0",income:3000,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+Germany:{visa:"Residence Permit",income:2500,tax:"Worldwide",crypto:"Taxable",pets:"Moderate"},
+Netherlands:{visa:"Self-employed",income:3000,tax:"Worldwide",crypto:"Taxable",pets:"Moderate"},
+Poland:{visa:"Temp Residence",income:1200,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+Hungary:{visa:"Residence",income:1000,tax:"15% flat",crypto:"Taxable",pets:"Easy"},
+Bulgaria:{visa:"Long Stay D",income:800,tax:"10% flat",crypto:"Taxable",pets:"Easy"},
+Croatia:{visa:"Digital Nomad",income:2500,tax:"Exempt DN",crypto:"Taxable",pets:"Easy"},
+Latvia:{visa:"Temp Residence",income:1200,tax:"Worldwide",crypto:"Taxable",pets:"Moderate"},
+Estonia:{visa:"Digital Nomad",income:3500,tax:"20%",crypto:"Taxable",pets:"Easy"},
+Lithuania:{visa:"Temp Residence",income:1500,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+UAE:{visa:"Remote / Golden",income:3000,tax:"0%",crypto:"Tax-free",pets:"Hard"},
+Thailand:{visa:"LTR / Elite",income:2500,tax:"Territorial",crypto:"Gray",pets:"Moderate"},
+Malaysia:{visa:"MM2H",income:3000,tax:"Territorial",crypto:"Gray",pets:"Moderate"},
+Indonesia:{visa:"Second Home",income:3000,tax:"Territorial",crypto:"Gray",pets:"Hard"},
+Mexico:{visa:"Temp Resident",income:2500,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+Panama:{visa:"Friendly Nations",income:2000,tax:"Territorial",crypto:"Tax-free foreign",pets:"Easy"},
+CostaRica:{visa:"Rentista",income:2500,tax:"Territorial",crypto:"Gray",pets:"Easy"},
+Colombia:{visa:"M Visa",income:2200,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+Uruguay:{visa:"Legal Residency",income:2000,tax:"Territorial",crypto:"Tax-free foreign",pets:"Easy"},
+Chile:{visa:"Temp Residence",income:2000,tax:"Worldwide",crypto:"Taxable",pets:"Easy"},
+Australia:{visa:"Skilled",income:4000,tax:"Worldwide",crypto:"Taxable",pets:"Very Hard"},
+NewZealand:{visa:"Skilled",income:3500,tax:"Worldwide",crypto:"Taxable",pets:"Very Hard"},
+Canada:{visa:"Express Entry",income:3500,tax:"Worldwide",crypto:"Taxable",pets:"Moderate"}
+};
 
 function render(){
 app.innerHTML="";
 updateProgress();
 
-if(steps[step].type==="final"){return showFinal();}
+const s=steps[step];
+if(s.type==="final"){return final();}
 
-const s = steps[step];
-let html = `<div class="card"><h2>${s.title}</h2>`;
+let html=`<div class="card"><h2 class="center">${s.title}</h2>`;
 
 if(s.type==="select"){
 html+=`<select id="input"><option value="">Select</option>`;
@@ -114,18 +121,18 @@ html+=`</select>`;
 }
 
 if(s.type==="range"){
-html+=`<div class="value" id="val">${s.id==="income"?"£":""}${s.min}</div>
+html+=`<div class="center value" id="val">${s.min}</div>
 <input type="range" id="input" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.min}"
-oninput="document.getElementById('val').innerText='${s.id==="income"?"£":""}'+this.value">`;
+oninput="document.getElementById('val').innerText=this.value">`;
 }
 
-html+=`<button onclick="next()">Continue</button></div>`;
+html+=`<div class="center"><button onclick="next()">Continue</button></div></div>`;
 app.innerHTML=html;
 }
 
 function next(){
 const v=document.getElementById("input").value;
-if(!v)return alert("Please complete this step");
+if(v==="")return alert("Please complete this step");
 data[steps[step].id]=v;
 step++;
 render();
@@ -133,34 +140,47 @@ render();
 
 function updateProgress(){
 progressText.innerText=`Step ${step+1} of ${steps.length}`;
-progressFill.style.width=((step)/steps.length*100)+"%";
+fill.style.width=((step)/steps.length*100)+"%";
 }
 
-function showFinal(){
-const c=data.country;
-const rules=countryRules[c];
+function final(){
+const r=rules[data.country];
+const taxResident=data.days>=183;
 app.innerHTML=`
 <div class="card">
-<h2>Your Relocation Summary</h2>
+<h2 class="center">Your Personal Relocation Summary</h2>
 
 <div class="section">
-<strong>Country:</strong> ${c}<br>
-<strong>Visa:</strong> ${rules.visa}<br>
-<strong>Tax:</strong> ${rules.tax}
+<strong>Country:</strong> ${data.country}<br>
+<strong>Visa Route:</strong> ${r.visa}<br>
+<strong>Minimum Income:</strong> £${r.income}/mo
+${data.income>=r.income?'<span class="badge good">Eligible</span>':'<span class="badge warn">Below Threshold</span>'}
 </div>
 
 <div class="section">
-<strong>Profile</strong><br>
-Income: £${data.income}<br>
-Age: ${data.age}<br>
-Work: ${data.work}
+<strong>Tax Status:</strong><br>
+${taxResident?'<span class="warn">Tax Resident</span>':'<span class="good">Not Tax Resident</span>'}<br>
+System: ${r.tax}<br>
+Crypto: ${r.crypto}
 </div>
 
 <div class="section">
-This is a **planning tool**, not legal advice. Country rules change frequently.
+<strong>Pets:</strong> ${data.pets} – ${r.pets}
 </div>
+
+<div class="section">
+<strong>Profile:</strong><br>
+Income £${data.income} · Age ${data.age} · Work ${data.work}
+</div>
+
+<div class="section center">
+<button>Unlock Premium PDF & Checklists (£9.97)</button>
+<p style="font-size:.9rem">Includes legal checklists, visa links, tax optimisation & pet guides.</p>
+</div>
+
+<p style="font-size:.85rem">Planning tool only. Always confirm with local professionals.</p>
 </div>`;
-progressFill.style.width="100%";
+fill.style.width="100%";
 }
 
 render();
